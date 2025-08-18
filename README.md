@@ -1,76 +1,63 @@
+# Prudhvi Donempudi
 
-## Prudhvi Donempudi
+**Salesforce Technologist | Software Engineer**  
+Hyderabad | dpd223344@gmail.com | (+91) 8464062737 | LinkedIn
 
-### Salesforce Technologist | Software Engineer
+---
 
-[suspicious link removed] | [dpd223344@gmail.com](mailto:dpd223344@gmail.com) | [(+91) 8464062737](https://www.google.com/search?q=tel:%2B918464062737)
+## About Me
 
------
+Experienced software engineer and Salesforce technologist, passionate about designing robust solutions that drive business transformation and growth. With core strengths in data structures, algorithms, web development, Salesforce automation, security, and cloud integrations, I thrive in high-impact, collaborative roles. My expertise spans Service and Experience Clouds, SSO, third-party APIs, and sharing know-how via technical articles.
 
-### About Me
+## Technical Skills
 
-From the foundational principles of data structures to the intricate world of the Salesforce ecosystem, my journey in technology has been driven by a single passion: solving complex puzzles. I thrive on diving deep into application architecture, untangling tricky integrations, and architecting robust solutions that make a real-world impact. My work is about translating complex business needs into elegant, secure, and efficient Salesforce solutions using tools like Apex and Lightning Web Components. Whether it's implementing a seamless single sign-on experience or debugging a third-party integration, I see every challenge as an opportunity to learn, build, and innovate. Beyond the code, I'm passionate about sharing what I learn, aiming to demystify the complexities of Salesforce for the wider developer community.
+- Java
+- JavaScript
+- Apex
+- C
+- Visualforce
+- Lightning Web Components
+- SOQL/SOSL
+- Salesforce Administration & Platform Development
+- Headless API Implementation
+- Experience Cloud
+- Identity Management (SSO, SAML, OIDC)
+- Angular TS & JavaScript
+- Splunk
+- Debugging & Troubleshooting
 
------
+## Certifications
 
-### Technical Capabilities
+- Intermediate JavaScript - HackerRank
+- Intermediate REST API â€“ HackerRank
+- Programming Using Java â€“ NPTEL
+- Python Programming â€“ NPTEL
+- Salesforce Platform Developer 1
+- Salesforce Administrator
+- Salesforce App Builder
+- Salesforce Experience Cloud Consultant
+- Salesforce Service Cloud Consultant
+- Salesforce Associate
+- nCino 301 Commercial Bank Configurator
 
-| Category | Skills |
-| :--- | :--- |
-| **Languages & Frameworks** | Java, JavaScript, Apex, C, Visualforce, Lightning Web Components, Angular TS |
-| **Salesforce & Cloud** | Salesforce Administration, Salesforce Platform Development, Experience Cloud, Salesforce Sites, Salesforce Identity (SSO) |
-| **Databases & APIs** | SOQL & SOSL, Headless API Implementation, REST APIs |
-| **Other Tools & Methodologies** | Custom Domains & URLs, DNS Management, Mutual Authentication, Salesforce Flows, Splunk, Git, Agile Methodologies |
+## Professional Experience
 
------
+**Senior Technical Support Engineer â€“ Salesforce India Pvt Ltd. (June 2024-Current)**  
+Signature Success Engineer  
+Service & Experience Clouds, SSO, OAuth, Domains, Apex, Lightning Web Components, Integrations, troubleshooting, deployments, knowledge management, technical training, backup lead.
 
-### Professional Experience
+**Technical Support Engineer â€“ Salesforce India Pvt Ltd. (Aug 2022-May 2024)**  
+Developer Support Engineer  
+Technical support, developer guidance, debugging, troubleshooting, knowledge base management, product expertise, customer interaction.
 
-#### **Senior Technical Support Engineer**
+**Associate Consultant â€“ Wipro Ltd (Dec 2020 - Jul 2022)**  
+Salesforce Developer (Client: Cynergy Bank, London, UK)  
+Integrations, REST APIs, Apex, Visualforce, Lightning Web Components, automation, nCino managed packages, customer portals, reporting, Agile environments.
 
-**Salesforce India Pvt Ltd.** | *June 2024 - Present*
-**Role:** Signature Success Engineer
+**Software Engineer Intern â€“ ValueLabs LLP (Dec 2019 - Mar 2020)**  
+MEAN Stack Developer  
+Angular TypeScript, Express.js, Node.js, SQL, data visualizations, responsive apps, version control.
 
-  * SME in Salesforce Service and Experience Clouds, specializing in SSO, OAuth, Domains, Portals, Apex, LWC, and Integrations.
-  * Analyze and troubleshoot complex cloud-related issues, developing practical use cases for new Salesforce features.
-  * Manage deployments via change sets and metadata API, and reproduce customer issues to identify root causes.
-  * Create and maintain Salesforce Knowledge articles and collaborate with internal teams on technical investigations.
+---
 
-#### **Technical Support Engineer**
-
-**Salesforce India Pvt Ltd.** | *Aug 2022 - May 2024*
-**Role:** Developer Support Engineer
-
-  * Resolved technical issues for developers, providing guidance on best practices and troubleshooting for Salesforce APIs and frameworks.
-  * Identified and resolved bugs and performance issues by analyzing logs, code, and configurations.
-  * Created and maintained a comprehensive knowledge base and stayed updated with the latest Salesforce releases and features.
-
-#### **Associate Consultant**
-
-**Wipro Limited** | *Dec 2020 - Jul 2022*
-**Role:** Salesforce Developer
-
-  * Developed third-party integrations using REST architecture and implemented business logic with Apex, LWC, and JavaScript.
-  * Automated processes using Flows, Triggers, and Process Builders, and created informative reports and dashboards.
-  * Managed user access, configured sharing rules, and deployed metadata using change sets, AutoRabbit, and Data Loader.
-  * Worked with nCino managed packages, including loan journeys, customer portals, and UI administration.
-
-#### **Software Engineer Intern**
-
-**ValueLabs LLP** | *Dec 2019 - Mar 2020*
-**Role:** MEAN Stack Developer
-
-  * Developed frontend using Angular, middleware with Express.js, and backend with Node.js.
-  * Crafted complex SQL queries and integrated Highcharts for interactive data visualizations.
-  * Wrote unit tests using Karma and developed responsive web applications within agile sprints.
-
------
-
-### Certifications
-
-  * Salesforce Platform Developer 1
-  * Salesforce Administrator
-  * Salesforce App Builder
-  * Salesforce Experience Cloud Consultant
-  * Salesforce Service Cloud Consultant
-  * Salesforce Associate
+Â© 2025 Prudhvi Donempudi. Powered by Salesforce & Passion for Tech.
