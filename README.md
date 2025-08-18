@@ -2,9 +2,6 @@
 ## Prudhvi Donempudi
 
 ### Salesforce Technologist | Software Engineer
-
-[Hyderabad](https://www.google.com/search?q=http://maps.google.com/0) | [dpd223344@gmail.com](mailto:dpd223344@gmail.com) | (+91) 8464062737
-
 -----
 
 ### About Me
