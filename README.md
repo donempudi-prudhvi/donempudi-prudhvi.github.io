@@ -1,4 +1,3 @@
-No problem\! Here is the content in a GitHub-friendly markdown format, which includes links for easier navigation.
 
 ## Prudhvi Donempudi
 
