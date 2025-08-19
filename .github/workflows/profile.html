@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prudhvi Donempudi - Salesforce Technologist | Software Engineer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind gray-50 */
+        }
+        .skill-tag {
+            background-color: #e0f2fe; /* Tailwind sky-100 */
+            color: #0c4a6e; /* Tailwind sky-800 */
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease-in-out;
+        }
+        .skill-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        #photo-upload-label {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        #photo-upload-label:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Header Section -->
+        <header class="flex flex-col md:flex-row items-center justify-between mb-10">
+            <div class="text-center md:text-left mb-6 md:mb-0">
+                <h1 class="text-4xl sm:text-5xl font-bold text-gray-900">Prudhvi Donempudi</h1>
+                <p class="text-xl text-blue-600 font-medium mt-1">Salesforce Technologist | Software Engineer</p>
+                <div class="mt-4 flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 text-gray-600">
+                    <span class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                        Hyderabad
+                    </span>
+                    <a href="mailto:dpd223344@gmail.com" class="flex items-center hover:text-blue-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
+                        dpd223344@gmail.com
+                    </a>
+                     <span class="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.518.759a11.024 11.024 0 004.758 4.758l.759-1.518a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>
+                        (+91) 8464062737
+                    </span>
+                </div>
+            </div>
+            <!-- Photo Upload Section -->
+            <div class="flex-shrink-0">
+                <input type="file" id="photo-upload" class="hidden" accept="image/*">
+                <label for="photo-upload" id="photo-upload-label" class="block w-36 h-36 rounded-full overflow-hidden bg-gray-200 border-4 border-white shadow-lg flex items-center justify-center text-center text-gray-500 p-2">
+                    <img id="photo-preview" src="https://placehold.co/144x144/EBF8FF/3182CE?text=Upload+Photo" alt="Your Photo" class="w-full h-full object-cover">
+                </label>
+            </div>
+        </header>
+
+        <!-- About Section -->
+        <section class="mb-10 card p-6">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-200 pb-2 mb-4">About Me</h2>
+            <p class="text-gray-700 leading-relaxed">
+                From the foundational principles of data structures to the intricate world of the Salesforce ecosystem, my journey in technology has been driven by a single passion: solving complex puzzles. I thrive on diving deep into application architecture, untangling tricky integrations, and architecting robust solutions that make a real-world impact. My work is about translating complex business needs into elegant, secure, and efficient Salesforce solutions using tools like Apex and Lightning Web Components. Whether it's implementing a seamless single sign-on experience or debugging a third-party integration, I see every challenge as an opportunity to learn, build, and innovate. Beyond the code, I'm passionate about sharing what I learn, aiming to demystify the complexities of Salesforce for the wider developer community.
+            </p>
+        </section>
+
+        <!-- Technical Skills Section -->
+        <section class="mb-10 card p-6">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-200 pb-2 mb-4">Technical Capabilities</h2>
+            <div class="flex flex-wrap gap-3">
+                <span class="skill-tag">Java</span>
+                <span class="skill-tag">JavaScript</span>
+                <span class="skill-tag">Apex</span>
+                <span class="skill-tag">C</span>
+                <span class="skill-tag">Visualforce</span>
+                <span class="skill-tag">Lightning Web Components</span>
+                <span class="skill-tag">SOQL & SOSL</span>
+                <span class="skill-tag">Headless API Implementation</span>
+                <span class="skill-tag">Salesforce Administration</span>
+                <span class="skill-tag">Salesforce Platform Development</span>
+                <span class="skill-tag">Experience Cloud</span>
+                <span class="skill-tag">Salesforce Sites</span>
+                <span class="skill-tag">Custom Domains & URLs</span>
+                <span class="skill-tag">DNS Management</span>
+                <span class="skill-tag">Salesforce Identity (SSO)</span>
+                <span class="skill-tag">Mutual Authentication</span>
+                <span class="skill-tag">Salesforce Flows</span>
+                <span class="skill-tag">Angular TS</span>
+                <span class="skill-tag">Splunk</span>
+                <span class="skill-tag">REST APIs</span>
+                <span class="skill-tag">Git</span>
+                <span class="skill-tag">Agile Methodologies</span>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="mb-10">
+            <h2 class="text-3xl font-bold text-gray-900 text-center mb-8">Professional Experience</h2>
+            <div class="space-y-8">
+                <!-- Job 1 -->
+                <div class="card p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-700">Senior Technical Support Engineer</h3>
+                            <p class="font-semibold text-gray-800">Salesforce India Pvt Ltd.</p>
+                        </div>
+                        <p class="text-sm text-gray-500 font-medium">June 2024 - Current</p>
+                    </div>
+                    <p class="text-md font-medium text-gray-600 mt-1 mb-3">Role: Signature Success Engineer</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>SME in Salesforce Service and Experience Clouds, specializing in SSO, OAuth, Domains, Portals, Apex, LWC, and Integrations.</li>
+                        <li>Analyze and troubleshoot complex cloud-related issues, developing practical use cases for new Salesforce features.</li>
+                        <li>Manage deployments via change sets and metadata API, and reproduce customer issues to identify root causes.</li>
+                        <li>Create and maintain Salesforce Knowledge articles and collaborate with internal teams on technical investigations.</li>
+                    </ul>
+                </div>
+                <!-- Job 2 -->
+                <div class="card p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-700">Technical Support Engineer</h3>
+                            <p class="font-semibold text-gray-800">Salesforce India Pvt Ltd.</p>
+                        </div>
+                        <p class="text-sm text-gray-500 font-medium">Aug 2022 - May 2024</p>
+                    </div>
+                     <p class="text-md font-medium text-gray-600 mt-1 mb-3">Role: Developer Support Engineer</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>Resolved technical issues for developers, providing guidance on best practices and troubleshooting for Salesforce APIs and frameworks.</li>
+                        <li>Identified and resolved bugs and performance issues by analyzing logs, code, and configurations.</li>
+                        <li>Created and maintained a comprehensive knowledge base and stayed updated with the latest Salesforce releases and features.</li>
+                    </ul>
+                </div>
+                 <!-- Job 3 -->
+                <div class="card p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-700">Associate Consultant</h3>
+                            <p class="font-semibold text-gray-800">Wipro Limited</p>
+                        </div>
+                        <p class="text-sm text-gray-500 font-medium">Dec 2020 - Jul 2022</p>
+                    </div>
+                     <p class="text-md font-medium text-gray-600 mt-1 mb-3">Role: Salesforce Developer</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>Developed third-party integrations using REST architecture and implemented business logic with Apex, LWC, and JavaScript.</li>
+                        <li>Automated processes using Flows, Triggers, and Process Builders, and created informative reports and dashboards.</li>
+                        <li>Managed user access, configured sharing rules, and deployed metadata using change sets, AutoRabbit, and Data Loader.</li>
+                        <li>Worked with nCino managed packages, including loan journeys, customer portals, and UI administration.</li>
+                    </ul>
+                </div>
+                 <!-- Job 4 -->
+                <div class="card p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-blue-700">Software Engineer Intern</h3>
+                            <p class="font-semibold text-gray-800">ValueLabs LLP</p>
+                        </div>
+                        <p class="text-sm text-gray-500 font-medium">Dec 2019 - Mar 2020</p>
+                    </div>
+                     <p class="text-md font-medium text-gray-600 mt-1 mb-3">Role: MEAN Stack Developer</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>Developed frontend using Angular, middleware with Express.js, and backend with Node.js.</li>
+                        <li>Crafted complex SQL queries and integrated Highcharts for interactive data visualizations.</li>
+                        <li>Wrote unit tests using Karma and developed responsive web applications within agile sprints.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications Section -->
+        <section class="mb-10 card p-6">
+            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-200 pb-2 mb-4">Certifications</h2>
+             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="flex items-center bg-blue-50 p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                    <span class="font-medium text-gray-700">Salesforce Platform Developer 1</span>
+                </div>
+                <div class="flex items-center bg-blue-50 p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                    <span class="font-medium text-gray-700">Salesforce Administrator</span>
+                </div>
+                <div class="flex items-center bg-blue-50 p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                    <span class="font-medium text-gray-700">Salesforce App Builder</span>
+                </div>
+                 <div class="flex items-center bg-blue-50 p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                    <span class="font-medium text-gray-700">Salesforce Experience Cloud Consultant</span>
+                </div>
+                 <div class="flex items-center bg-blue-50 p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                    <span class="font-medium text-gray-700">Salesforce Service Cloud Consultant</span>
+                </div>
+                 <div class="flex items-center bg-blue-50 p-3 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                    <span class="font-medium text-gray-700">Salesforce Associate</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="text-center p-6 bg-white mt-10 border-t">
+        <p class="text-gray-500">&copy; 2024 Prudhvi Donempudi. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript for handling the photo upload and preview
+        const photoUpload = document.getElementById('photo-upload');
+        const photoPreview = document.getElementById('photo-preview');
+
+        photoUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    photoPreview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
+</body>
+</html>
