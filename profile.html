@@ -1,357 +1,291 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <script>
-    // Get the modal
-    window.onload = function(){
-        
-    var modal = document.getElementById('myModal');
-    
-    // Get the image and insert it inside the modal - use its "alt" text as a caption
-    var img = document.getElementById('photo-preview');
-    var modalImg = document.getElementById("img01");
-    //var captionText = document.getElementById("caption");
-    img.onclick = function(){
-    modal.style.display = "block";
-    modalImg.src = this.src;
-    //captionText.innerHTML = this.alt;
-    }
-    
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
-    
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() { 
-    modal.style.display = "none";
-    }
-
-    }
-    </script>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="https://ca.slack-edge.com/E7T5PNK3P-U03SUKW3FFV-4e0ca0b3065e-512">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prudhvi Donempudi - Salesforce Technologist | Software Engineer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Tailwind gray-50 */
+            /* Use Google Font or fallback to Bootstrap's native stack */
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bs-tertiary-bg); /* Bootstrap's light gray */
         }
-        .skill-tag {
-            background-color: #e0f2fe; /* Tailwind sky-100 */
-            color: #0c4a6e; /* Tailwind sky-800 */
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: all 0.2s ease-in-out;
-        }
-        .skill-tag:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-        }
-        .card {
-            background-color: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            transition: box-shadow 0.3s ease-in-out;
-        }
-        .card:hover {
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
+
         #photo-upload-label {
             cursor: pointer;
             transition: all 0.3s ease;
+            /* Custom size to match original 'w-36 h-36' */
+            width: 9rem; 
+            height: 9rem;
         }
+
         #photo-upload-label:hover {
             transform: scale(1.05);
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
         }
-        #photo-preview:hover {opacity: 0.7;}
-        
-        /* The Modal (background) */
-        .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        padding-top: 100px; /* Location of the box */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+
+        #photo-preview {
+            cursor: pointer;
+        }
+
+        #photo-preview:hover {
+            opacity: 0.7;
         }
         
-        /* Modal Content (image) */
-        .modal-content {
-        margin: auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-        }
-        
-        /* Caption of Modal Image */
-        #caption {
-        margin: auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-        text-align: center;
-        color: #ccc;
-        padding: 10px 0;
-        height: 150px;
-        }
-        
-        /* Add Animation */
-        .modal-content, #caption {  
-        animation-name: zoom;
-        animation-duration: 0.6s;
-        }
-        
-        @keyframes zoom {
-        from {transform: scale(0.1)} 
-        to {transform: scale(1)}
-        }
-        
-        /* The Close Button */
-        .close {
-        position: absolute;
-        top: 15px;
-        right: 35px;
-        color: #f1f1f1;
-        font-size: 40px;
-        font-weight: bold;
-        transition: 0.3s;
-        }
-        
-        .close:hover,
-        .close:focus {
-        color: #bbb;
-        text-decoration: none;
-        cursor: pointer;
-        }
-        
-        /* 100% Image Width on Smaller Screens */
-        @media only screen and (max-width: 700px){
-        .modal-content {
-        width: 100%;
-        }
+        /* Custom style for the modal image to ensure it's contained */
+        .modal-image {
+            max-width: 100%;
+            height: auto;
         }
     </style>
 </head>
-<body class="text-gray-800">
-    <div id="myModal" class="modal">
-    <span class="close">&times;</span>
-    <img class="modal-content" id="img01">
-    
-    </div>
+<body class="text-dark">
 
-    <div class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
-
-        <!-- Header Section -->
-        <header class="flex flex-col md:flex-row items-center justify-between mb-10">
-            <div class="text-center md:text-left mb-6 md:mb-0">
-                <h1 class="text-4xl sm:text-5xl font-bold text-gray-900">Prudhvi Donempudi</h1>
-                <p class="text-xl text-blue-600 font-medium mt-1">Salesforce Technologist | Software Engineer</p>
-                <div class="mt-4 flex flex-wrap justify-center md:justify-start gap-x-6 gap-y-2 text-gray-600">
-                    <span class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
-                        Hyderabad
-                    </span>
-                    <a href="mailto:dpd223344@gmail.com" class="flex items-center hover:text-blue-600 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
-                        dpd223344@gmail.com
-                    </a>
-                    <!-- <span class="flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.518.759a11.024 11.024 0 004.758 4.758l.759-1.518a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>
-                        (+91) 8464062737
-                    </span> -->
+    <div class="modal fade" id="photoModal" tabindex="-1" aria-labelledby="photoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="modalImage" src="" alt="Donempudi Prudhvi" class="modal-image">
                 </div>
             </div>
-            <!-- Photo Upload Section -->
-            <div class="flex-shrink-0">
-                <!--<input type="file" id="photo-upload" class="hidden" accept="image/*">-->
-                <label for="photo-upload" id="photo-upload-label" class="block w-36 h-36 rounded-full overflow-hidden bg-gray-200 border-4 border-white shadow-lg flex items-center justify-center text-center text-gray-500 p-2">
-                    <!--<img id="photo-preview" src="https://ca.slack-edge.com/E7T5PNK3P-U03SUKW3FFV-4e0ca0b3065e-512" alt="Donempudi Prudhvi" class="w-full h-full object-cover">-->
-                    <img id="photo-preview" src="./IMG_0092.JPG" alt="Donempudi Prudhvi" class="w-full h-full object-cover" style="clip-path: ellipse(50% 50%);">
-                    
+        </div>
+    </div>
+
+    <div class="container-lg py-4">
+
+        <header class="d-md-flex align-items-center justify-content-between mb-5">
+            <div class="text-center text-md-start mb-4 mb-md-0">
+                <h1 class="display-4 fw-bold text-dark">Prudhvi Donempudi</h1>
+                <p class="fs-4 text-primary fw-medium mt-1">Salesforce Technologist | Software Engineer</p>
+                <div class="mt-4 d-flex flex-wrap justify-content-center justify-content-md-start gap-3 text-secondary">
+                    <span class="d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="me-2 text-primary" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>
+                        Hyderabad
+                    </span>
+                    <a href="mailto:dpd223344@gmail.com" class="d-flex align-items-center text-decoration-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="me-2 text-primary" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>
+                        dpd223344@gmail.com
+                    </a>
+                </div>
+            </div>
+            <div class="flex-shrink-0 mx-auto mx-md-0">
+                <label for="photo-upload" id="photo-upload-label" class="d-block rounded-circle overflow-hidden bg-light border border-4 border-white shadow-lg">
+                    <img id="photo-preview" src="./IMG_0092.JPG" alt="Donempudi Prudhvi" class="w-100 h-100" style="object-fit: cover; clip-path: ellipse(50% 50%);" data-bs-toggle="modal" data-bs-target="#photoModal">
                 </label>
             </div>
         </header>
 
-        <!-- About Section -->
-        <section class="mb-10 card p-6">
-            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-200 pb-2 mb-4">About Me</h2>
-            <p class="text-gray-700 leading-relaxed">
+        <section class="mb-4 card shadow-sm p-4">
+            <h2 class="fs-2 fw-bold text-dark border-bottom border-primary-subtle pb-2 mb-3">About Me</h2>
+            <p class="text-secondary lh-base">
                 From the foundational principles of data structures to the intricate world of the Salesforce ecosystem, my journey in technology has been driven by a single passion: solving complex puzzles. I thrive on diving deep into application architecture, untangling tricky integrations, and architecting robust solutions that make a real-world impact. My work is about translating complex business needs into elegant, secure, and efficient Salesforce solutions using tools like Apex and Lightning Web Components. Whether it's implementing a seamless single sign-on experience or debugging a third-party integration, I see every challenge as an opportunity to learn, build, and innovate. Beyond the code, I'm passionate about sharing what I learn, aiming to demystify the complexities of Salesforce for the wider developer community.
             </p>
         </section>
 
-        <!-- Technical Skills Section -->
-        <section class="mb-10 card p-6">
-            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-200 pb-2 mb-4">Technical Capabilities</h2>
-            <div class="flex flex-wrap gap-3">
-                <span class="skill-tag">Java</span>
-                <span class="skill-tag">JavaScript</span>
-                <span class="skill-tag">Apex</span>
-                <span class="skill-tag">C</span>
-                <span class="skill-tag">Visualforce</span>
-                <span class="skill-tag">Lightning Web Components</span>
-                <span class="skill-tag">SOQL & SOSL</span>
-                <span class="skill-tag">Headless API Implementation</span>
-                <span class="skill-tag">Salesforce Administration</span>
-                <span class="skill-tag">Salesforce Platform Development</span>
-                <span class="skill-tag">Experience Cloud</span>
-                <span class="skill-tag">Salesforce Sites</span>
-                <span class="skill-tag">Custom Domains & URLs</span>
-                <span class="skill-tag">DNS Management</span>
-                <span class="skill-tag">Salesforce Identity (SSO)</span>
-                <span class="skill-tag">Mutual Authentication</span>
-                <span class="skill-tag">Salesforce Flows</span>
-                <span class="skill-tag">Angular TS</span>
-                <span class="skill-tag">Splunk</span>
-                <span class="skill-tag">REST APIs</span>
-                <span class="skill-tag">Git</span>
-                <span class="skill-tag">Agile Methodologies</span>
+        <section class="mb-4 card shadow-sm p-4">
+            <h2 class="fs-2 fw-bold text-dark border-bottom border-primary-subtle pb-2 mb-3">Technical Capabilities</h2>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Java</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">JavaScript</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Apex</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">C</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Visualforce</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Lightning Web Components</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">SOQL & SOSL</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Headless API Implementation</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Salesforce Administration</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Salesforce Platform Development</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Experience Cloud</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Salesforce Sites</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Custom Domains & URLs</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">DNS Management</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Salesforce Identity (SSO)</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Mutual Authentication</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Salesforce Flows</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Angular TS</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Splunk</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">REST APIs</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Git</span>
+                <span class="badge rounded-pill text-bg-primary-subtle text-primary-emphasis p-2">Agile Methodologies</span>
             </div>
         </section>
 
-        <!-- Experience Section -->
-        <section class="mb-10">
-            <h2 class="text-3xl font-bold text-gray-900 text-center mb-8">Professional Experience</h2>
-            <div class="space-y-8">
-                <!-- Job 1 -->
-                <div class="card p-6">
-                    <div class="flex justify-between items-start">
+        <section class="mb-4">
+            <h2 class="fs-1 fw-bold text-dark text-center mb-4">Professional Experience</h2>
+            <div>
+                <div class="card shadow-sm p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h3 class="text-xl font-bold text-blue-700">Senior Technical Support Engineer</h3>
-                            <p class="font-semibold text-gray-800">Salesforce India Pvt Ltd.</p>
+                            <h3 class="fs-4 fw-bold text-primary">Senior Technical Support Engineer</h3>
+                            <p class="fw-semibold text-dark mb-0">Salesforce India Pvt Ltd.</p>
                         </div>
-                        <p class="text-sm text-gray-500 font-medium">June 2024 - Current</p>
+                        <p class="text-muted fw-medium small">June 2024 - Current</p>
                     </div>
-                    <p class="text-md font-medium text-gray-600 mt-1 mb-3">Role: Signature Success Engineer</p>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700">
-                        <li>SME in Salesforce Service and Experience Clouds, specializing in SSO, OAuth, Domains, Portals, Apex, LWC, and Integrations.</li>
-                        <li>Analyze and troubleshoot complex cloud-related issues, developing practical use cases for new Salesforce features.</li>
-                        <li>Manage deployments via change sets and metadata API, and reproduce customer issues to identify root causes.</li>
-                        <li>Create and maintain Salesforce Knowledge articles and collaborate with internal teams on technical investigations.</li>
+                    <p class="fw-medium text-secondary mt-1 mb-3">Role: Signature Success Engineer</p>
+                    <ul class="text-secondary ps-4">
+                        <li class="mb-2">SME in Salesforce Service and Experience Clouds, specializing in SSO, OAuth, Domains, Portals, Apex, LWC, and Integrations.</li>
+                        <li class="mb-2">Analyze and troubleshoot complex cloud-related issues, developing practical use cases for new Salesforce features.</li>
+                        <li class="mb-2">Manage deployments via change sets and metadata API, and reproduce customer issues to identify root causes.</li>
+                        <li class="mb-2">Create and maintain Salesforce Knowledge articles and collaborate with internal teams on technical investigations.</li>
                     </ul>
                 </div>
-                <!-- Job 2 -->
-                <div class="card p-6">
-                    <div class="flex justify-between items-start">
+                <div class="card shadow-sm p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h3 class="text-xl font-bold text-blue-700">Technical Support Engineer</h3>
-                            <p class="font-semibold text-gray-800">Salesforce India Pvt Ltd.</p>
+                            <h3 class="fs-4 fw-bold text-primary">Technical Support Engineer</h3>
+                            <p class="fw-semibold text-dark mb-0">Salesforce India Pvt Ltd.</p>
                         </div>
-                        <p class="text-sm text-gray-500 font-medium">Aug 2022 - May 2024</p>
+                        <p class="text-muted fw-medium small">Aug 2022 - May 2024</p>
                     </div>
-                     <p class="text-md font-medium text-gray-600 mt-1 mb-3">Role: Developer Support Engineer</p>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700">
-                        <li>Resolved technical issues for developers, providing guidance on best practices and troubleshooting for Salesforce APIs and frameworks.</li>
-                        <li>Identified and resolved bugs and performance issues by analyzing logs, code, and configurations.</li>
-                        <li>Created and maintained a comprehensive knowledge base and stayed updated with the latest Salesforce releases and features.</li>
+                     <p class="fw-medium text-secondary mt-1 mb-3">Role: Developer Support Engineer</p>
+                    <ul class="text-secondary ps-4">
+                        <li class="mb-2">Resolved technical issues for developers, providing guidance on best practices and troubleshooting for Salesforce APIs and frameworks.</li>
+                        <li class="mb-2">Identified and resolved bugs and performance issues by analyzing logs, code, and configurations.</li>
+                        <li class="mb-2">Created and maintained a comprehensive knowledge base and stayed updated with the latest Salesforce releases and features.</li>
                     </ul>
                 </div>
-                 <!-- Job 3 -->
-                <div class="card p-6">
-                    <div class="flex justify-between items-start">
+                 <div class="card shadow-sm p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h3 class="text-xl font-bold text-blue-700">Associate Consultant</h3>
-                            <p class="font-semibold text-gray-800">Wipro Limited</p>
+                            <h3 class="fs-4 fw-bold text-primary">Associate Consultant</h3>
+                            <p class="fw-semibold text-dark mb-0">Wipro Limited</p>
                         </div>
-                        <p class="text-sm text-gray-500 font-medium">Dec 2020 - Jul 2022</p>
+                        <p class="text-muted fw-medium small">Dec 2020 - Jul 2022</p>
                     </div>
-                     <p class="text-md font-medium text-gray-600 mt-1 mb-3">Role: Salesforce Developer</p>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700">
-                        <li>Developed third-party integrations using REST architecture and implemented business logic with Apex, LWC, and JavaScript.</li>
-                        <li>Automated processes using Flows, Triggers, and Process Builders, and created informative reports and dashboards.</li>
-                        <li>Managed user access, configured sharing rules, and deployed metadata using change sets, AutoRabbit, and Data Loader.</li>
-                        <li>Worked with nCino managed packages, including loan journeys, customer portals, and UI administration.</li>
+                    <p class="fw-medium text-secondary mt-1 mb-3">Role: Salesforce Developer</p>
+                    <ul class="text-secondary ps-4">
+                        <li class="mb-2">Developed third-party integrations using REST architecture and implemented business logic with Apex, LWC, and JavaScript.</li>
+                        <li class="mb-2">Automated processes using Flows, Triggers, and Process Builders, and created informative reports and dashboards.</li>
+                        <li class="mb-2">Managed user access, configured sharing rules, and deployed metadata using change sets, AutoRabbit, and Data Loader.</li>
+                        <li class="mb-2">Worked with nCino managed packages, including loan journeys, customer portals, and UI administration.</li>
                     </ul>
                 </div>
-                 <!-- Job 4 -->
-                <div class="card p-6">
-                    <div class="flex justify-between items-start">
+                 <div class="card shadow-sm p-4 mb-4">
+                    <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <h3 class="text-xl font-bold text-blue-700">Software Engineer Intern</h3>
-                            <p class="font-semibold text-gray-800">ValueLabs LLP</p>
+                            <h3 class="fs-4 fw-bold text-primary">Software Engineer Intern</h3>
+                            <p class="fw-semibold text-dark mb-0">ValueLabs LLP</p>
                         </div>
-                        <p class="text-sm text-gray-500 font-medium">Dec 2019 - Mar 2020</p>
+                        <p class="text-muted fw-medium small">Dec 2019 - Mar 2020</p>
                     </div>
-                     <p class="text-md font-medium text-gray-600 mt-1 mb-3">Role: MEAN Stack Developer</p>
-                    <ul class="list-disc list-inside space-y-2 text-gray-700">
-                        <li>Developed frontend using Angular, middleware with Express.js, and backend with Node.js.</li>
-                        <li>Crafted complex SQL queries and integrated Highcharts for interactive data visualizations.</li>
-                        <li>Wrote unit tests using Karma and developed responsive web applications within agile sprints.</li>
+                    <p class="fw-medium text-secondary mt-1 mb-3">Role: MEAN Stack Developer</p>
+                    <ul class="text-secondary ps-4">
+                        <li class="mb-2">Developed frontend using Angular, middleware with Express.js, and backend with Node.js.</li>
+                        <li class="mb-2">Crafted complex SQL queries and integrated Highcharts for interactive data visualizations.</li>
+                        <li class="mb-2">Wrote unit tests using Karma and developed responsive web applications within agile sprints.</li>
                     </ul>
                 </div>
             </div>
         </section>
 
-        <!-- Certifications Section -->
-        <section class="mb-10 card p-6">
-            <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-200 pb-2 mb-4">Certifications</h2>
-             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="flex items-center bg-blue-50 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                    <span class="font-medium text-gray-700">Salesforce Platform Developer 1</span>
+        <section class="mb-4 card shadow-sm p-4">
+            <h2 class="fs-2 fw-bold text-dark border-bottom border-primary-subtle pb-2 mb-3">Certifications</h2>
+             <div class="row g-3">
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center bg-primary-subtle p-3 rounded-3 h-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="text-primary me-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        <span class="fw-medium text-dark">Salesforce Platform Developer 1</span>
+                    </div>
                 </div>
-                <div class="flex items-center bg-blue-50 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                    <span class="font-medium text-gray-700">Salesforce Administrator</span>
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center bg-primary-subtle p-3 rounded-3 h-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="text-primary me-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        <span class="fw-medium text-dark">Salesforce Administrator</span>
+                    </div>
                 </div>
-                <div class="flex items-center bg-blue-50 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                    <span class="font-medium text-gray-700">Salesforce App Builder</span>
+                <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center bg-primary-subtle p-3 rounded-3 h-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="text-primary me-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        <span class="fw-medium text-dark">Salesforce App Builder</span>
+                    </div>
                 </div>
-                 <div class="flex items-center bg-blue-50 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                    <span class="font-medium text-gray-700">Salesforce Experience Cloud Consultant</span>
+                 <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center bg-primary-subtle p-3 rounded-3 h-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="text-primary me-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        <span class="fw-medium text-dark">Salesforce Experience Cloud Consultant</span>
+                    </div>
                 </div>
-                 <div class="flex items-center bg-blue-50 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                    <span class="font-medium text-gray-700">Salesforce Service Cloud Consultant</span>
+                 <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center bg-primary-subtle p-3 rounded-3 h-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="text-primary me-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        <span class="fw-medium text-dark">Salesforce Service Cloud Consultant</span>
+                    </div>
                 </div>
-                 <div class="flex items-center bg-blue-50 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                    <span class="font-medium text-gray-700">Salesforce Associate</span>
+                 <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center bg-primary-subtle p-3 rounded-3 h-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="text-primary me-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        <span class="fw-medium text-dark">Salesforce Associate</span>
+                    </div>
                 </div>
-                 <div class="flex items-center bg-blue-50 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                    <span class="font-medium text-gray-700">Salesforce AI Specialist</span>
+                 <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center bg-primary-subtle p-3 rounded-3 h-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="text-primary me-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        <span class="fw-medium text-dark">Salesforce AI Specialist</span>
+                    </div>
                 </div>
-                 <div class="flex items-center bg-blue-50 p-3 rounded-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
-                    <span class="font-medium text-gray-700">Salesforce AI Associate</span>
+                 <div class="col-lg-4 col-md-6">
+                    <div class="d-flex align-items-center bg-primary-subtle p-3 rounded-3 h-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" class="text-primary me-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" /></svg>
+                        <span class="fw-medium text-dark">Salesforce AI Associate</span>
+                    </div>
                 </div>
             </div>
         </section>
 
     </div>
 
-    <footer class="text-center p-6 bg-white mt-10 border-t">
-        <p class="text-gray-500">@2025 Prudhvi Donempudi. All Rights Reserved.</p>
+    <footer class="text-center p-4 bg-body mt-5 border-top">
+        <p class="text-muted mb-0">@2025 Prudhvi Donempudi. All Rights Reserved.</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var photoModal = document.getElementById('photoModal');
+          if (photoModal) {
+            var modalImg = document.getElementById('modalImage');
+            var triggerImg = document.getElementById('photo-preview');
+            
+            // Event listener for when the modal is *about* to be shown
+            photoModal.addEventListener('show.bs.modal', function () {
+              // Set the modal image's src to the trigger image's src
+              if(triggerImg) {
+                modalImg.src = triggerImg.src;
+              }
+            });
+          }
+        });
+
+        /* // The original photo upload script is left commented out
+        // as the <input id="photo-upload"> is not present in the HTML.
+
         // JavaScript for handling the photo upload and preview
         const photoUpload = document.getElementById('photo-upload');
         const photoPreview = document.getElementById('photo-preview');
 
-        photoUpload.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    photoPreview.src = e.target.result;
+        if(photoUpload) {
+            photoUpload.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        photoPreview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
-            }
-        });
+            });
+        }
+        */
     </script>
 
 </body>
