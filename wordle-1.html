@@ -1,0 +1,72 @@
+<html>
+    <title>Wordle</title>
+    <head>
+        <style>
+
+        </style>
+        <script>
+            
+            /*function getCookie(name) {
+                const nameEQ = name + "=";
+                const ca = document.cookie.split(';');
+                for(let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+
+            function setCookie(name, value, days) {
+                let expires = "";
+                if (days) {
+                    const date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    expires = "; expires=" + date.toUTCString();
+                }
+                document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+            }
+        
+            // Example usage:
+           /* const myCookieName = "user_id";
+            if (!getCookie(myCookieName)) {
+                setCookie(myCookieName, "some_unique_value", 30); // Set cookie for 30 days
+                console.log("Cookie inserted.");
+            } else {
+                console.log("Cookie already exists.");
+            }*/
+
+
+            /*
+            var wordforGame;
+            window.addEventListener("load", (event) => {
+               
+                wordforGame = makeApiCall();
+                console.log('>>' +wordforGame);
+
+            });
+
+            async function makeApiCall(){
+                return  fetch('https://random-word-api.herokuapp.com/word?length=5') // Replace with your API endpoint
+                .then(response => {
+                if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json(); // Or response.text() for plain text
+                })
+                .then(data => {
+                console.log(data); // Process the retrieved data
+                })
+                .catch(error => {
+                console.error('Error fetching data:', error);
+                });
+            } */
+        </script>
+    </head>
+    <body>
+
+
+
+    </body>
+</html>
+
