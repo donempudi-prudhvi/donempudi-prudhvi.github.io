@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login with Toggle Password</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+
+        .login-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h2 { margin-bottom: 1.5rem; color: #333; }
+
+        .input-group {
+            margin: 8px 0;
+            text-align: left;
+        }
+
+        /* --- Password Container for Positioning --- */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            /* Extra padding on right to prevent text overlap with eye icon */
+            padding-right: 40px; 
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* --- The Eye Icon Styling --- */
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1.2rem;
+            user-select: none; /* Prevents highlighting the icon */
+            color: #666;
+        }
+        
+        .toggle-password:hover { color: #333; }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+
+        button:hover { background-color: #0056b3; }
+
+        /* --- Callout Styling --- */
+        .callout {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            display: none;
+            text-align: left;
+            border-left: 5px solid;
+        }
+
+        .callout.success {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
+        }
+
+        .callout.error {
+            display: block;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-left-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h2>Login</h2>
+        
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Username (try: admin)">
+        </div>
+
+        <div class="input-group password-wrapper">
+            <input type="password" id="password" placeholder="Password (try: 1234)">
+            <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+        </div>
+
+        <button onclick="attemptLogin()">Sign In</button>
+
+        <div id="loginCallout" class="callout">
+            <span id="calloutMessage"></span>
+        </div>
+    </div>
+
+    <script>
+        // --- Logic to Toggle Password Visibility ---
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.toggle-password');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text'; // Show text
+                toggleIcon.textContent = '🔒'; // Change icon to indicate "hide" (optional)
+            } else {
+                passwordInput.type = 'password'; // Hide text
+                toggleIcon.textContent = '👁️'; // Change icon back to eye
+            }
+        }
+
+        // --- Logic for Login Callout ---
+        function attemptLogin() {
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            const callout = document.getElementById('loginCallout');
+            const message = document.getElementById('calloutMessage');
+
+            callout.className = 'callout'; 
+
+            if (user === "admin" && pass === "1234") {
+                callout.classList.add('success');
+                message.innerHTML = "<strong>Success!</strong> Redirecting to dashboard...";
+            } else {
+                callout.classList.add('error');
+                if (user === "" || pass === "") {
+                    message.innerHTML = "<strong>Error:</strong> Fields cannot be empty.";
+                } else {
+                    message.innerHTML = "<strong>Error:</strong> Invalid username or password.";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
