@@ -107,15 +107,15 @@
         <h2>Login</h2>
         
         <div class="input-group">
-            <input type="text" id="username" placeholder="Username (try: admin)">
+            <input type="text" id="username" placeholder="Username">
         </div>
 
         <div class="input-group password-wrapper">
-            <input type="password" id="password" placeholder="Password (try: 1234)">
+            <input type="password" id="password" placeholder="Password">
             <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
         </div>
 
-        <button onclick="attemptLogin()">Sign In</button>
+        <button onclick="startLogin()">Sign In</button>
 
         <div id="loginCallout" class="callout">
             <span id="calloutMessage"></span>
@@ -123,6 +123,70 @@
     </div>
 
     <script>
+
+        // The actual code starts here 
+        var clientId = "3MVG9D68eYs7112EIiIQ.W2PxF2vNPnsYGxnz0b_XTA26GSH.lcfDbpK73Qr706vUs3P2l_iyZMby9qb7bywh";
+        var clientSecret = "470F543CCC15F073E4C1A1BB5A33F01EA8B3C386BADCA153EC607D510C5BCB11";
+        var baseURL = "https://prudhvi-demo-org--developer.sandbox.my.site.com/testlwrvforcesite";
+        var redirectURL = "https://prudhvi-demo-org--developer.sandbox.my.site.com/testlwrvforcesite/services/oauth2/echo"
+              
+        // Performs the code exchange
+        function doCodeExchange(authorizeResponse) {
+           //Perform Code Exchange
+           //Get Access Token
+           var client = new XMLHttpRequest();
+           client.open("POST", authorizeResponse.sfdc_community_url + "/services/oauth2/token", true);
+           client.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+           client.send("code=" + authorizeResponse.code + "&grant_type=authorization_code&client_id=" + clientId + "&redirect_uri=" + redirectURL);
+           client.onreadystatechange = function() {
+               if(this.readyState == 3) {
+                   response = JSON.parse(client.response);
+                   getUserInfo(response.access_token, response.sfdc_community_url)
+               }
+           }
+        }
+        
+        // Gets User Info
+        function getUserInfo(accessToken, userInfoBaseURL) {
+           var client = new XMLHttpRequest();
+           client.open("GET", userInfoBaseURL + "/services/oauth2/userinfo", true);
+           client.setRequestHeader("Content-Type", "application/json");
+           client.setRequestHeader("Authorization", "Bearer " + accessToken);
+           client.send();
+           client.onreadystatechange = function() {
+               if(this.readyState == 3) {
+                   response = JSON.parse(client.response);
+                   response.access_token = accessToken;
+                   document.getElementById("json").textContent = JSON.stringify(response, undefined, 2);
+                   document.getElementById("results").style.display="block";
+               }
+           }
+        }
+        
+        //Starts the Login Process
+        function startLogin() {
+           var username = document.getElementById('username').value; //headless.user@developer.org
+           var password = document.getElementById('password').value; //Baddu@8464
+          
+           var encodedUNP = btoa(username + ':' + password);
+           var client = new XMLHttpRequest();
+          
+           client.open("POST", baseURL + "/services/oauth2/authorize", true);
+           client.setRequestHeader("Auth-Request-Type", "Named-User");
+           client.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+           client.setRequestHeader("Authorization", "Basic " + encodedUNP);
+           client.send("response_type=code_credentials&client_id=" + clientId + "&redirect_uri=" + redirectURL);
+           client.onreadystatechange = function() {
+               if(this.readyState == 3) {
+                   response = JSON.parse(client.response);
+                   doCodeExchange(response);
+               }
+           }
+           return false;
+        }    
+
+        // Actual code ends here
+        
         // --- Logic to Toggle Password Visibility ---
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('password');
