@@ -179,7 +179,11 @@
            client.onreadystatechange = function() {
                if(this.readyState == 3) {
                    response = JSON.parse(client.response);
+                   if(response.error){
+                        window.alert("something went wrong in authorisation");
+                   }else{
                    doCodeExchange(response);
+                   }
                }
            }
            return false;
