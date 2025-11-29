@@ -103,7 +103,7 @@
 </head>
 <body>
 
-    <div class="login-card">
+    <div class="login-card" id="formSection">
         <h2>Login</h2>
         
         <div class="input-group">
@@ -120,6 +120,13 @@
         <div id="loginCallout" class="callout">
             <span id="calloutMessage"></span>
         </div>
+    </div>
+
+    <div id="welcomeSection" style="display:none;">
+            <span class="success-icon">✓</span>
+            <h2>Success!</h2>
+            <p id="json">Welcome back, Admin.</p>
+            
     </div>
 
     <script>
@@ -148,6 +155,9 @@
         
         // Gets User Info
         function getUserInfo(accessToken, userInfoBaseURL) {
+            const formSection = document.getElementById('formSection');
+            const welcomeSection = document.getElementById('welcomeSection');
+            
            var client = new XMLHttpRequest();
            client.open("GET", userInfoBaseURL + "/services/oauth2/userinfo", true);
            client.setRequestHeader("Content-Type", "application/json");
@@ -158,7 +168,10 @@
                    response = JSON.parse(client.response);
                    response.access_token = accessToken;
                    document.getElementById("json").textContent = JSON.stringify(response, undefined, 2);
-                   document.getElementById("results").style.display="block";
+                   //document.getElementById("results").style.display="block";
+
+                   formSection.style.display = 'none';
+                   welcomeSection.style.display = 'block';
                }
            }
         }
