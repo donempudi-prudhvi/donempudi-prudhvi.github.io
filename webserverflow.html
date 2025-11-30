@@ -54,7 +54,7 @@
        
        var client = new XMLHttpRequest();
        client.open("POST", myDomain + "/services/oauth2/authorize", true);
-       client.send("?client_id="+clientId+"&redirect_uri="+redirectURL+"&response_type=code&code_challenge="+code_challenge+"&display=popup");
+       client.send("client_id="+clientId+"&redirect_uri="+redirectURL+"&response_type=code&code_challenge="+code_challenge+"&display=popup");
        client.onreadystatechange = function() {
            if(this.readyState == 3) {
                response = JSON.parse(client.response);
