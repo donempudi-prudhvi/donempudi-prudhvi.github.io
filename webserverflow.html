@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OAuth2 PKCE Example — Authorize and Call API</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 2rem; max-width: 900px; margin: auto; }
+    .card { border: 1px solid #e6e6e6; padding: 1.25rem; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+    button { background: #0366d6; color: white; border: 0; padding: 0.6rem 1rem; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+    pre { background: #f6f8fa; padding: 1rem; border-radius: 6px; overflow: auto; }
+    .muted { color: #6b7280; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <h1>Authorize and call API (OAuth2 PKCE example)</h1>
+  <div class="card">
+
+    <div id="controls">
+      <button id="authorizeBtn" onclick="initateAuthorization()">Authorize</button>
+    </div>
+
+    <div id="status" style="margin-top:1rem"></div>
+
+    <h3>API response</h3>
+    <pre id="apiResult">(none)</pre>
+
+    <h3>Token response</h3>
+    <pre id="tokenResult">(none)</pre>
+  </div>
+
+  <script>
+
+   window.onload = function() {
+
+           var client = new XMLHttpRequest();
+           client.open("GET",pkceEndpoint, true);
+           client.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+           client.send();
+           client.onreadystatechange = function() {
+               if(this.readyState == 3) {
+                   response = JSON.parse(client.response);
+                   code_challenge = response.code_challenge;
+                   code_verifier = response.code_verifier;
+                   code_challenge_method = response.code_challenge_method;
+               }
+           }
+             
+        };
+
+    var myDomain = "https://prudhvi-demo-org--developer.sandbox.my.salesforce.com";
+    var clientId = "3MVG9D68eYs7112EIiIQ.W2PxF2vNPnsYGxnz0b_XTA26GSH.lcfDbpK73Qr706vUs3P2l_iyZMby9qb7bywh";
+    var clientSecret = "470F543CCC15F073E4C1A1BB5A33F01EA8B3C386BADCA153EC607D510C5BCB11";
+    var redirectURL = "https://prudhvi-demo-org--developer.sandbox.my.site.com/testlwrvforcesite/services/oauth2/echo"
+    var pkceEndpoint = "https://prudhvi-demo-org--developer.sandbox.my.salesforce.com/services/oauth2/pkce/generator";
+    var code_challenge;
+    var code_verifier;
+    var code_challenge_method;
+
+   function initateAuthorization(){
+       
+       var client = new XMLHttpRequest();
+       client.open("POST", myDomain + "/services/oauth2/authorize", true);
+       client.send("?client_id="+clientId+"&redirect_uri="+redirectURL+"&response_type=code&code_challenge="+code_challenge+"&display=popup");
+       client.onreadystatechange = function() {
+           if(this.readyState == 3) {
+               response = JSON.parse(client.response);
+               console.log(response)
+           }
+       }
+
+
+   }
+  
+  </script>
+
+</body>
+</html>
