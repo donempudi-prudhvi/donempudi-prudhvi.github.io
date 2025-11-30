@@ -97,9 +97,11 @@
            if(urlParams.size>0){
              //token callback
                if (urlParams.has('code')) {
-                    getAccessToken(urlParams.get(code););
-                }
-             document.getElementById("loading-card").style = "display:block;";
+                    getAccessToken(urlParams.get('code');
+                    document.getElementById("loading-card").style = "display:block;";
+               }else{
+                 window.location.href = redirectURL + '/webserverflow.html';
+               }
            }else{
              document.getElementById("controls").style = "display:block;";
              var client = new XMLHttpRequest();
@@ -162,7 +164,9 @@
                if(this.readyState == 3) {
                    response = JSON.parse(client.response);
                    console.log(response);
-                   document.getElementById("json").textContent = JSON.stringify(response, undefined, 2);
+                   document.getElementById("loading-card").style = "display:none;";
+                   document.getElementById("controls").style = "display:none;";
+                   document.getElementById("json").textContent = JSON.stringify(response, undefined, 5);
                }
            }
         }
