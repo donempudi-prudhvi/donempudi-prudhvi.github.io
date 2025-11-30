@@ -10,11 +10,74 @@
     button { background: #0366d6; color: white; border: 0; padding: 0.6rem 1rem; border-radius: 6px; font-size: 1rem; cursor: pointer; }
     pre { background: #f6f8fa; padding: 1rem; border-radius: 6px; overflow: auto; }
     .muted { color: #6b7280; font-size: 0.95rem; }
+    .loading-card {
+    background-color: #fff;
+    padding: 30px 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;}
+
+    
+    .loading-text {
+        font-size: 1.2em;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+        .dot {
+        display: inline-block;
+        width: 0.2em;
+        margin-left: 0.1em;
+        opacity: 0;
+        animation: pulse 1.5s infinite;
+    }
+    
+    /* Delay the animation for each dot */
+    .dot.one {
+        animation-delay: 0s;
+    }
+    
+    .dot.two {
+        animation-delay: 0.3s;
+    }
+    
+    .dot.three {
+        animation-delay: 0.6s;
+    }
+    
+    @keyframes pulse {
+        0% {
+            opacity: 0;
+            transform: translateY(0px);
+        }
+        50% {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(0px);
+        }
+    }
+    
   </style>
 </head>
 <body>
-  <h1>OAuth2 Web Server Flow</h1>
-  <div class="card">
+<div class="card" >
+    <h1>OAuth2 Web Server Flow</h1>
+    
+  <div class="loading-card" id="loading-card">
+        <span class="loading-text">Loading
+            <span class="dot one">.</span>
+            <span class="dot two">.</span>
+            <span class="dot three">.</span>
+        </span>
+  </div>
+  <p id="json"></p>
+  
+  
 
     <div id="controls">
       <button id="authorizeBtn" onclick="initateAuthorization()">Authorize</button>
@@ -23,20 +86,34 @@
   </div>
 
   <script>
+    //show loading by default
+
+    document.getElementById("loading-card").style = "display:none;";
+    document.getElementById("controls").style = "display:none;";
 
    window.onload = function() {
 
-           var client = new XMLHttpRequest();
-           client.open("GET",pkceEndpoint, true);
-           client.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-           client.send();
-           client.onreadystatechange = function() {
-               if(this.readyState == 3) {
-                   response = JSON.parse(client.response);
-                   code_challenge = response.code_challenge;
-                   code_verifier = response.code_verifier;
-                   code_challenge_method = response.code_challenge_method;
-               }
+           const urlParams = new URLSearchParams(window.location.search);
+           if(urlParams.size>0){
+             //token callback
+               if (urlParams.has('code')) {
+                    getAccessToken(urlParams.get(code););
+                }
+             document.getElementById("loading-card").style = "display:block;";
+           }else{
+             document.getElementById("controls").style = "display:block;";
+             var client = new XMLHttpRequest();
+             client.open("GET",pkceEndpoint, true);
+             client.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+             client.send();
+             client.onreadystatechange = function() {
+                 if(this.readyState == 3) {
+                     response = JSON.parse(client.response);
+                     code_challenge = response.code_challenge;
+                     code_verifier = response.code_verifier;
+                     code_challenge_method = response.code_challenge_method;
+                 }
+             }
            }
              
         };
@@ -44,7 +121,8 @@
     var myDomain = "https://prudhvi-demo-org--developer.sandbox.my.salesforce.com";
     var clientId = "3MVG9D68eYs7112EIiIQ.W2PxF2vNPnsYGxnz0b_XTA26GSH.lcfDbpK73Qr706vUs3P2l_iyZMby9qb7bywh";
     var clientSecret = "470F543CCC15F073E4C1A1BB5A33F01EA8B3C386BADCA153EC607D510C5BCB11";
-    var redirectURL = "https://prudhvi-demo-org--developer.sandbox.my.site.com/testlwrvforcesite/services/oauth2/echo"
+    //var redirectURL = "https://prudhvi-demo-org--developer.sandbox.my.site.com/testlwrvforcesite/services/oauth2/echo";
+    var redirectURL = "https://donempudi-prudhvi.github.io/webserverflow.html";
     var pkceEndpoint = "https://prudhvi-demo-org--developer.sandbox.my.salesforce.com/services/oauth2/pkce/generator";
     var code_challenge;
     var code_verifier;
@@ -61,7 +139,7 @@
        //         console.log(response)
        //     }
        // }
-       const url = new URL("/services/oauth2/authorize", myDomain);
+      const url = new URL("/services/oauth2/authorize", myDomain);
       
       url.searchParams.set("client_id", clientId);
       url.searchParams.set("redirect_uri", redirectURL);
@@ -73,6 +151,23 @@
 
 
    }
+
+    getAccessToken(code){
+
+            var client = new XMLHttpRequest();
+           client.open("POST", myDomain + "/services/oauth2/token", true);
+           client.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+           client.send("code=" + code + "&grant_type=authorization_code&client_id=" + clientId + "&redirect_uri=" + redirectURL +"&code_verifier="+code_verifier+"&client_secret="+clientSecret);
+           client.onreadystatechange = function() {
+               if(this.readyState == 3) {
+                   response = JSON.parse(client.response);
+                   console.log(response);
+                   document.getElementById("json").textContent = JSON.stringify(response, undefined, 2);
+               }
+           }
+        }
+    }
+    
   
   </script>
 
