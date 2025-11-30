@@ -52,15 +52,24 @@
 
    function initateAuthorization(){
        
-       var client = new XMLHttpRequest();
-       client.open("POST", myDomain + "/services/oauth2/authorize", true);
-       client.send("client_id="+clientId+"&redirect_uri="+redirectURL+"&response_type=code&code_challenge="+code_challenge+"&display=popup");
-       client.onreadystatechange = function() {
-           if(this.readyState == 3) {
-               response = JSON.parse(client.response);
-               console.log(response)
-           }
-       }
+       // var client = new XMLHttpRequest();
+       // client.open("POST", myDomain + "/services/oauth2/authorize", true);
+       // client.send("client_id="+clientId+"&redirect_uri="+redirectURL+"&response_type=code&code_challenge="+code_challenge+"&display=popup");
+       // client.onreadystatechange = function() {
+       //     if(this.readyState == 3) {
+       //         response = JSON.parse(client.response);
+       //         console.log(response)
+       //     }
+       // }
+       const url = new URL("/services/oauth2/authorize", myDomain);
+      
+      url.searchParams.set("client_id", clientId);
+      url.searchParams.set("redirect_uri", redirectURL);
+      url.searchParams.set("response_type", "code");
+      url.searchParams.set("display", "popup");
+      url.searchParams.set("code_challenge", code_challenge);
+  
+     window.location.href = url.toString();
 
 
    }
