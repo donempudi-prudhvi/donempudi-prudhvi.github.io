@@ -97,7 +97,7 @@
            if(urlParams.size>0){
              //token callback
                if (urlParams.has('code')) {
-                    getAccessToken(urlParams.get('code');
+                    getAccessToken(urlParams.get('code'));
                     document.getElementById("loading-card").style = "display:block;";
                }else{
                  window.location.href = redirectURL + '/webserverflow.html';
