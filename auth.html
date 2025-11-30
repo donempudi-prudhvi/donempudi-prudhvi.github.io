@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OAuth2 PKCE Example — Authorize and Call API</title>
+  <style>
+    body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; padding: 2rem; max-width: 900px; margin: auto; }
+    .card { border: 1px solid #e6e6e6; padding: 1.25rem; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+    button { background: #0366d6; color: white; border: 0; padding: 0.6rem 1rem; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+    pre { background: #f6f8fa; padding: 1rem; border-radius: 6px; overflow: auto; }
+    .muted { color: #6b7280; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <h1>Authorize and call API (OAuth2 PKCE example)</h1>
+  <div class="card">
+    <p class="muted">This is a static HTML example that demonstrates: 1) redirecting to an OAuth2 authorization endpoint (PKCE), 2) exchanging the authorization code for an access token, and 3) calling a downstream API using that access token and displaying the response.</p>
+
+    <div id="controls">
+      <button id="authorizeBtn">Authorize</button>
+    </div>
+
+    <div id="status" style="margin-top:1rem"></div>
+
+    <h3>API response</h3>
+    <pre id="apiResult">(none)</pre>
+
+    <h3>Token response</h3>
+    <pre id="tokenResult">(none)</pre>
+  </div>
+
+  <script>
+    // ========= CONFIGURATION - replace these with values from your OAuth2 provider ==========
+    const CLIENT_ID = '<YOUR_CLIENT_ID>'; // required
+    const AUTHORIZATION_ENDPOINT = 'https://example.com/oauth/authorize'; // e.g. https://accounts.example.com/oauth2/authorize
+    const TOKEN_ENDPOINT = 'https://example.com/oauth/token'; // e.g. https://accounts.example.com/oauth2/token
+    const REDIRECT_URI = window.location.origin + window.location.pathname; // redirect back to this same page
+    const SCOPES = 'openid profile email';
+    const SERVICE_API_URL = 'https://api.example.com/me'; // API to call with access token
+    // ======================================================================================
+
+    // UI elements
+    const authorizeBtn = document.getElementById('authorizeBtn');
+    const statusEl = document.getElementById('status');
+    const tokenResultEl = document.getElementById('tokenResult');
+    const apiResultEl = document.getElementById('apiResult');
+
+    function setStatus(msg) { statusEl.textContent = msg; }
+
+    // Utilities for PKCE
+    function base64urlencode(buffer) {
+      return btoa(String.fromCharCode.apply(null, new Uint8Array(buffer)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+    }
+
+    async function sha256(plain) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(plain);
+      return await crypto.subtle.digest('SHA-256', data);
+    }
+
+    function randomString(length) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+      let str = '';
+      const array = new Uint32Array(length);
+      crypto.getRandomValues(array);
+      for (let i = 0; i < length; i++) {
+        str += chars[array[i] % chars.length];
+      }
+      return str;
+    }
+
+    async function makeCodeChallenge(verifier) {
+      const hashed = await sha256(verifier);
+      return base64urlencode(hashed);
+    }
+
+    function buildAuthorizeUrl({clientId, redirectUri, scope, state, code_challenge}){
+      const params = new URLSearchParams({
+        response_type: 'code',
+        client_id: clientId,
+        redirect_uri: redirectUri,
+        scope: scope,
+        state: state,
+        code_challenge: code_challenge,
+        code_challenge_method: 'S256'
+      });
+      return AUTHORIZATION_ENDPOINT + '?' + params.toString();
+    }
+
+    authorizeBtn.addEventListener('click', async () => {
+      if (!CLIENT_ID || CLIENT_ID.includes('<YOUR_CLIENT_ID>')){
+        alert('Please set CLIENT_ID and endpoint configuration at the top of the file before using this demo.');
+        return;
+      }
+
+      // generate PKCE code verifier and challenge
+      const code_verifier = randomString(64);
+      const code_challenge = await makeCodeChallenge(code_verifier);
+      const state = randomString(16);
+
+      // store verifier and state so we can validate after redirect
+      localStorage.setItem('pkce_code_verifier', code_verifier);
+      localStorage.setItem('pkce_state', state);
+
+      const url = buildAuthorizeUrl({
+        clientId: CLIENT_ID,
+        redirectUri: REDIRECT_URI,
+        scope: SCOPES,
+        state,
+        code_challenge
+      });
+
+      // Redirect user to authorization endpoint
+      window.location.href = url;
+    });
+
+    // On page load: detect if we've been redirected back with code
+    async function handleRedirectCallback(){
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      const state = params.get('state');
+      const error = params.get('error');
+
+      if (error) {
+        setStatus('Authorization error: ' + error);
+        return;
+      }
+
+      if (!code) {
+        setStatus('Ready — click "Authorize" to start the flow.');
+        return;
+      }
+
+      setStatus('Authorization code received. Exchanging for token...');
+
+      const savedState = localStorage.getItem('pkce_state');
+      const code_verifier = localStorage.getItem('pkce_code_verifier');
+
+      if (state !== savedState) {
+        setStatus('Invalid state. Possible CSRF attack.');
+        return;
+      }
+
+      // Exchange code for token
+      try {
+        const body = new URLSearchParams();
+        body.set('grant_type', 'authorization_code');
+        body.set('code', code);
+        body.set('redirect_uri', REDIRECT_URI);
+        body.set('client_id', CLIENT_ID);
+        body.set('code_verifier', code_verifier);
+
+        const tokenResp = await fetch(TOKEN_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: body.toString()
+        });
+
+        const tokenJson = await tokenResp.json();
+        tokenResultEl.textContent = JSON.stringify(tokenJson, null, 2);
+
+        if (!tokenResp.ok) {
+          setStatus('Token endpoint returned an error. See token response below.');
+          return;
+        }
+
+        setStatus('Token received. Calling API with access token...');
+
+        const accessToken = tokenJson.access_token;
+        if (!accessToken) {
+          setStatus('No access_token in token response.');
+          return;
+        }
+
+        // Call the service with the access token
+        const apiResp = await fetch(SERVICE_API_URL, {
+          method: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + accessToken,
+            'Accept': 'application/json'
+          }
+        });
+
+        const apiJson = await apiResp.json();
+        apiResultEl.textContent = JSON.stringify({status: apiResp.status, body: apiJson}, null, 2);
+
+        if (!apiResp.ok) {
+          setStatus('API returned an error. See API response above.');
+          return;
+        }
+
+        setStatus('Success — API response displayed below.');
+
+      } catch (e) {
+        setStatus('Network or parsing error: ' + e.message);
+      } finally {
+        // Remove code and state from URL for cleanliness
+        params.delete('code');
+        params.delete('state');
+        const newUrl = window.location.origin + window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+        history.replaceState({}, document.title, newUrl);
+      }
+    }
+
+    // Run on load
+    handleRedirectCallback();
+  </script>
+
+  <!-- Notes:
+    - This static page performs the authorization-code-with-PKCE flow entirely in the browser.
+    - Many OAuth2 token endpoints do NOT allow CORS requests from browsers for security. If your provider's token endpoint blocks CORS, you must perform the token exchange on a server and return the tokens to the client.
+    - Replace the placeholder configuration values at the top of this file with real values from your provider.
+    - Make sure the provider's redirect URI list includes the exact URL of this page (including scheme and path).
+  -->
+</body>
+</html>
