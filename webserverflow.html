@@ -114,6 +114,11 @@
                      code_challenge = response.code_challenge;
                      code_verifier = response.code_verifier;
                      code_challenge_method = response.code_challenge_method;
+                     const d = new Date();
+                     d.setTime(d.getTime() + (10 * 60 * 1000));
+                     const expires = "expires=" + d.toUTCString();
+                     document.cookie = code_verifier + "=" + code_verifier + ";" + expires + ";path=/";
+                   
                  }
              }
            }
@@ -128,7 +133,7 @@
     var pkceEndpoint = "https://prudhvi-demo-org--developer.sandbox.my.salesforce.com/services/oauth2/pkce/generator";
     var code_challenge;
     var code_verifier;
-    var code_challenge_method;
+    var code_challenge_method = "S256";
 
    function initateAuthorization(){
        
@@ -159,6 +164,7 @@
             var client = new XMLHttpRequest();
            client.open("POST", myDomain + "/services/oauth2/token", true);
            client.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+           const code_verifier = document.cookie.split('; ').find(row => row.startsWith('code_verifier='))?.split('=')[1];
            client.send("code=" + code + "&grant_type=authorization_code&client_id=" + clientId + "&redirect_uri=" + redirectURL +"&code_verifier="+code_verifier+"&client_secret="+clientSecret);
            client.onreadystatechange = function() {
                if(this.readyState == 3) {
