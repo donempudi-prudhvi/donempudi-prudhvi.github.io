@@ -117,7 +117,7 @@
            const refresh_token_value = refresh_token_element.value;
            var client = new XMLHttpRequest();
            client.open("POST", myDomain + "/services/oauth2/token?client_id="+clientId+"&client_secret="+clientSecret+"&grant_type=refresh_token"+"&refresh_token="+refresh_token_value, true);
-           //client.setRequestHeader("Authorization", "Basic");
+           client.setRequestHeader("Authorization", "Basic");
            client.send();
            client.onreadystatechange = function() {
                if(this.readyState == 3) {
