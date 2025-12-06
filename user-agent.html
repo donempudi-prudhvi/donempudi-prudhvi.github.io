@@ -90,9 +90,10 @@
     //show loading by default
 
     document.getElementById("loading-card").style = "display:none;";
-    document.getElementById("controls").style = "display:none;";
+    document.getElementById("controls").style = "display:block;";
 
    window.onload = function() {
+          
 
            const urlParams = new URLSearchParams(window.location.search);
            if(urlParams.size>0){
