@@ -100,7 +100,7 @@
                
                      document.getElementById("loading-card").style = "display:none;";
                      document.getElementById("controls").style = "display:none;";
-                     document.getElementById("json").textContent = window.location.href;
+                     document.getElementById("json").textContent = JSON.stringify(window.location.hash, undefined, 2);
             
            }else{
                 window.location.href = redirectURL;
