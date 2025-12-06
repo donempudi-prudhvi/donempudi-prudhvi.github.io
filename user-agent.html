@@ -95,18 +95,15 @@
    window.onload = function() {
           
 
-           const urlParams = new URLSearchParams(window.location.search);
-           if(urlParams.size>0){
-             //token callback
-               if (urlParams.get('refresh_token')!=null && urlParams.get('refresh_token') != '') {
-                    //getAccessToken(urlParams.get('code'));
+           
+           if((window.location.href).includes('access_token')){
+               
                      document.getElementById("loading-card").style = "display:none;";
                      document.getElementById("controls").style = "display:none;";
-                     document.getElementById("json").textContent = window.location.search;
-                     //document.getElementById("loading-card").style = "display:block;";
-               }else{
-                 window.location.href = redirectURL;
-               }
+                     document.getElementById("json").textContent = window.location.href;
+            
+           }else{
+                window.location.href = redirectURL;
            }
            // else{
            //   document.getElementById("controls").style = "display:block;";
