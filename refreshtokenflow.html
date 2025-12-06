@@ -112,18 +112,18 @@
    
     function getAccessToken(refreshtoken){
            document.getElementById("loading-card").style = "display:block;";
+           document.getElementById("controls").style = "display:none;";
            const refresh_token_element = document.getElementById("refresh_token");
            const refresh_token_value = refresh_token_element.value;
            var client = new XMLHttpRequest();
            client.open("POST", myDomain + "/services/oauth2/token", true);
-           client.setRequestHeader("Authorization", "Basic");
+           //client.setRequestHeader("Authorization", "Basic");
            client.send("client_id="+clientId+"&client_secret="+clientSecret+"&grant_type=refresh_token"+"&refresh_token="+refresh_token_value);
            client.onreadystatechange = function() {
                if(this.readyState == 3) {
                    response = JSON.parse(client.response);
                    console.log(response);
                    document.getElementById("loading-card").style = "display:none;";
-                   document.getElementById("controls").style = "display:none;";
                    document.getElementById("json").textContent = JSON.stringify(response, undefined, 5);
                }
            }
