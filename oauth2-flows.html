@@ -145,16 +145,80 @@
             .form-grid { grid-template-columns: 1fr; }
             .full-width { grid-column: span 1; }
         }
+
+            .loading-card {
+    background-color: #fff;
+    padding: 30px 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;}
+
+    
+    .loading-text {
+        font-size: 1.2em;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+        .dot {
+        display: inline-block;
+        width: 0.2em;
+        margin-left: 0.1em;
+        opacity: 0;
+        animation: pulse 1.5s infinite;
+    }
+    
+    /* Delay the animation for each dot */
+    .dot.one {
+        animation-delay: 0s;
+    }
+    
+    .dot.two {
+        animation-delay: 0.3s;
+    }
+    
+    .dot.three {
+        animation-delay: 0.6s;
+    }
+    
+    @keyframes pulse {
+        0% {
+            opacity: 0;
+            transform: translateY(0px);
+        }
+        50% {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(0px);
+        }
+    }
     </style>
 </head>
 <body>
 
     <canvas id="fireworksCanvas"></canvas>
+    
+
 
     <div class="container">
         <h1>OAuth2 Flows Supported By Salesforce</h1>
 
-        <div class="form-grid">
+        <div class="loading-card" id="loading-card">
+            <span class="loading-text">Loading
+                <span class="dot one">.</span>
+                <span class="dot two">.</span>
+                <span class="dot three">.</span>
+            </span>
+       </div>
+
+        <p id="json" style="overflow-wrap:break-word;"></p>
+
+        <div class="form-grid" id="form-grid">
             
             <div class="form-group full-width">
                 <label for="flowType">Select OAuth 2.0 Flow</label>
@@ -213,13 +277,19 @@
                 <label for="userinfo">User Info Endpoint</label>
                 <input type="text" id="userinfo" placeholder="https://login.salesforce.com/services/oauth2/userinfo">
             </div>
+
             
             <div class="form-group full-width">
                 <div class="checkbox-group">
-                    <input type="checkbox" id="pkce">
+                    <input type="checkbox" id="pkce" onchange=togglePKCE()>
                     <label for="pkce" style="margin-bottom:0; cursor:pointer;">Enable PKCE (Proof Key for Code Exchange)</label>
                 </div>
                 <small style="color:#666; margin-left: 35px;">Recommended for public clients (Mobile/SPA) to prevent code interception.</small>
+            </div>
+
+            <div class="form-group full-width" id="pkceurl">
+                <label for="pkceendpoint">PKCE End Point</label>
+                <input type="text" id="pkceendpoint" placeholder="https://login.salesforce.com/services/oauth2/pkce/generator">
             </div>
 
             <button class="btn-start" id="btnStart" onclick="startOAuthFlow()">Start the OAuth Flow</button>
@@ -228,10 +298,124 @@
     </div>
 
     <script>
-        // --- 1. THE EMPTY OAUTH FUNCTION ---
-        function startOAuthFlow() {
-            console.log("OAuth Flow Initiated...");
+        //hide loading-card by default
+        document.getElementById("loading-card").style = "display:none;";
+                
+        
+        //Global Variables
+        var code_challenge; 
+        var code_verifier;
+        var code_challenge_method;
+        //Global Variables
 
+        window.onload = function() {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.size>0){
+                //token callback
+                if (urlParams.get('code')!=null && urlParams.get('code') != '') {
+                document.getElementById("loading-card").style = "display:block;";
+                document.getElementById("form-grid").style = "display:none;";
+                getAccessToken(urlParams.get('code'));
+                
+                }else{
+                window.location.href = "https://donempudi-prudhvi.github.io/oauth2-flows.html";
+                }
+          }else{
+            if(localStorage.getItem('metadata') != null)
+                localStorage.removeItem('metadata');
+         }
+        }
+
+        function getAccessToken(code){
+           const metadata = JSON.parse(localStorage.getItem('metadata'));
+           var client = new XMLHttpRequest();
+           client.open("POST", , true);
+           client.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+           const code_verifier = document.cookie.split('; ').find(row => row.startsWith('code_verifier='))?.split('=')[1];
+           if(metadata.pkceChecked){
+                client.send("code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&code_verifier="+code_verifier+"&client_secret="+metadata.client_secret);
+           }else{
+                client.send("code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&client_secret="+metadata.client_secret);
+           }
+           client.onreadystatechange = function() {
+               if(this.readyState == 3) {
+                   response = JSON.parse(client.response);
+                   document.getElementById("loading-card").style = "display:none;";
+                   document.getElementById("json").textContent = JSON.stringify(response, undefined, 2);;
+               }
+           }
+        }
+        
+        let pkceData = new Promise((resolve, reject) => {
+
+            var client = new XMLHttpRequest();
+            client.open("GET",pkceEndpoint, true);
+            client.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            client.send();
+            client.onreadystatechange = function() {
+                if(this.readyState == 3) {
+                response = JSON.parse(client.response);
+                code_challenge = response.code_challenge;
+                code_verifier = response.code_verifier;
+                code_challenge_method = response.code_challenge_method;
+                const d = new Date();
+                d.setTime(d.getTime() + (10 * 60 * 1000));
+                const expires = "expires=" + d.toUTCString();
+                document.cookie = "code_verifier=" + code_verifier + ";" + expires + ";path=/";
+                resolve({'code_challenge': response.code_challenge,'code_challenge_method':response.code_challenge_method});
+                }else{
+                    reject('something went wrong');
+                }
+            }
+    
+        })
+
+        function togglePKCE(){
+            if(document.getElementById('pkce').checked){
+                document.getElementById('pkceurl').style = "display:block;"
+                document.getElementById('pkceurl').setAttribute("required",true);        
+ 
+            }else{
+                document.getElementById('pkceurl').style = "display:none;"
+                document.getElementById('pkceurl').setAttribute("required",false);
+            }
+        }
+
+        function startOAuthFlow() {
+            const clientId = document.getElementById('consumerKey').value;
+            const client_secret = document.getElementById('consumerSecret').value;
+            const redirectURL = document.getElementById('redirectUri').value;
+            const oauth_url = document.getElementById('authUrl').value;
+            const tokenUrl  = document.getElementById('tokenUrl').value;
+            const userinfourl = document.getElementById('userinfo').value;
+                
+            const metadata = { 
+                'clientId' : clientId,
+                'client_secret' : client_secret,
+                'redirectURL' : redirectURL,
+                'tokenUrl' :  tokenUrl,
+                'userinfourl' : userinfourl,
+                'pkceChecked' : document.getElementById('pkce').checked
+            };
+            
+            localStorage.setItem('metadata', JSON.stringify(metadata));
+            //initiate the authorization flow
+            const url = new URL("",oauth_url);
+            url.searchParams.set("client_id", clientId);
+            url.searchParams.set("redirect_uri", redirectURL);
+            url.searchParams.set("response_type", "code");
+
+            if(document.getElementById('pkce').checked){
+                pkceData().then(data=>{
+                    url.searchParams.set("code_challenge", data.code_challenge);
+                    url.searchParams.set("code_challenge_method", data.code_challenge_method);                    
+                }).catch(error=>{
+                    alert('Something went wrong in initiating authorization');
+                })
+            }
+            
+            window.location.href = url.toString();
             
         }
 
@@ -239,13 +423,29 @@
         function updateFieldsBasedOnFlow() {
             const flow = document.getElementById('flowType').value;
             const grantInput = document.getElementById('grantType');
+            const response_type = grantInput
             
             // Auto-fill grant types for better learning experience
-            if(flow === 'web_server') grantInput.value = 'response_type=code';
-            else if(flow === 'user_agent') grantInput.value = 'response_type=token';
-            else if(flow === 'jwt') grantInput.value = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
-            else if(flow === 'device') grantInput.value = 'response_type=device_code';
-            else if(flow === 'client_creds') grantInput.value = 'grant_type=client_credentials';
+            if(flow === 'web_server') {
+                grantInput.value = 'response_type=code';
+                document.getElementById('consumerKey').setAttribute("required",true);
+                document.getElementById('redirectUri').setAttribute("required",true);
+                document.getElementById('consumerSecret').setAttribute("required",true);
+                document.getElementById('grantType').setAttribute("required",true);
+                
+            };
+            else if(flow === 'user_agent'){
+                grantInput.value = 'response_type=token';
+            }
+            else if(flow === 'jwt') {
+                grantInput.value = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
+            }
+            else if(flow === 'device') {
+                grantInput.value = 'response_type=device_code';
+            }
+            else if(flow === 'client_creds'){
+                grantInput.value = 'grant_type=client_credentials';
+            }
         }
 
         // --- 3. THE SPECTACULAR FIREWORKS ENGINE ---
