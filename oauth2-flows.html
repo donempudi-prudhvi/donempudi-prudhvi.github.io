@@ -350,7 +350,7 @@
         let pkceData = new Promise((resolve, reject) => {
 
             var client = new XMLHttpRequest();
-            client.open("GET",pkceEndpoint, true);
+            client.open("GET",document.getElementById('pkceEndpoint').value, true);
             client.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             client.send();
             client.onreadystatechange = function() {
