@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth2 Flows Supported By Salesforce</title>
+    <style>
+        /* --- 1. THE CALM BACKGROUND --- */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* A calm, deep gradient representing focus and learning */
+            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            color: #333;
+        }
+
+        /* --- 2. GLASSMORPHISM CONTAINER --- */
+        .container {
+            background: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+            backdrop-filter: blur(12px);             /* The frosted glass effect */
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 800px;
+            max-width: 90%;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #3f2b96;
+            display: inline-block;
+            padding-bottom: 10px;
+            width: 100%;
+        }
+
+        /* --- 3. FORM GRID LAYOUT --- */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        input[type="text"], select {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+        }
+
+        input[type="text"]:focus, select:focus {
+            border-color: #3f2b96;
+            box-shadow: 0 0 8px rgba(63, 43, 150, 0.2);
+            outline: none;
+        }
+
+        /* --- 4. CHECKBOX STYLING --- */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(63, 43, 150, 0.05);
+            border-radius: 8px;
+        }
+        
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        /* --- 5. SPECTACULAR BUTTON --- */
+        .btn-start {
+            grid-column: span 2;
+            background: linear-gradient(90deg, #3f2b96 0%, #a8c0ff 100%);
+            border: none;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(63, 43, 150, 0.4);
+        }
+
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(63, 43, 150, 0.6);
+        }
+
+        .btn-start:active {
+            transform: translateY(1px);
+        }
+
+        /* --- 6. FIREWORKS CANVAS --- */
+        #fireworksCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Let clicks pass through to the form */
+            z-index: 999;
+        }
+
+        /* Responsive for mobile */
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fireworksCanvas"></canvas>
+
+    <div class="container">
+        <h1>OAuth2 Flows Supported By Salesforce</h1>
+
+        <div class="form-grid">
+            
+            <div class="form-group full-width">
+                <label for="flowType">Select OAuth 2.0 Flow</label>
+                <select id="flowType" onchange="updateFieldsBasedOnFlow()">
+                    <option value="" disabled selected>-- Select a Flow to Learn --</option>
+                    <option value="web_server">Web Server Flow (Authorization Code)</option>
+                    <option value="user_agent">User-Agent Flow (Implicit)</option>
+                    <option value="jwt">JWT Bearer Token Flow</option>
+                    <option value="device">Device Flow (IoT)</option>
+                    <option value="client_creds">Client Credentials Flow</option>
+                    <option value="refresh">Refresh Token Flow</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="consumerKey">Consumer Key (Client ID)</label>
+                <input type="text" id="consumerKey" placeholder="e.g., 3MVG9..." >
+            </div>
+
+            <div class="form-group">
+                <label for="consumerSecret">Consumer Secret (Client Secret)</label>
+                <input type="text" id="consumerSecret" placeholder="Required for Web Server Flow">
+            </div>
+
+            <div class="form-group">
+                <label for="redirectUri">Redirect URI (Callback URL)</label>
+                <input type="text" id="redirectUri" placeholder="e.g., https://localhost:3000/callback">
+            </div>
+
+            <div class="form-group">
+                <label for="scope">Scopes</label>
+                <input type="text" id="scope" placeholder="e.g., api refresh_token web">
+            </div>
+
+            <div class="form-group">
+                <label for="grantType">Grant / Response Type</label>
+                <input type="text" id="grantType" placeholder="e.g., authorization_code">
+            </div>
+            
+            <div class="form-group">
+                <label for="state">State (Security Parameter)</label>
+                <input type="text" id="state" placeholder="Optional random string">
+            </div>
+
+            <div class="form-group full-width">
+                <label for="authUrl">Authorization Endpoint</label>
+                <input type="text" id="authUrl" value="https://login.salesforce.com/services/oauth2/authorize">
+            </div>
+
+            <div class="form-group full-width">
+                <label for="tokenUrl">Token Endpoint</label>
+                <input type="text" id="tokenUrl" value="https://login.salesforce.com/services/oauth2/token">
+            </div>
+            
+            <div class="form-group full-width">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="pkce">
+                    <label for="pkce" style="margin-bottom:0; cursor:pointer;">Enable PKCE (Proof Key for Code Exchange)</label>
+                </div>
+                <small style="color:#666; margin-left: 35px;">Recommended for public clients (Mobile/SPA) to prevent code interception.</small>
+            </div>
+
+            <button class="btn-start" id="btnStart" onclick="startOAuthFlow()">Start the OAuth Flow</button>
+
+        </div>
+    </div>
+
+    <script>
+        // --- 1. THE EMPTY OAUTH FUNCTION ---
+        function startOAuthFlow() {
+            console.log("OAuth Flow Initiated...");
+            
+            // For educational engagement, we trigger fireworks on click!
+            triggerFireworks();
+        }
+
+        // --- 2. DYNAMIC UI HELPER (Optional for UX) ---
+        function updateFieldsBasedOnFlow() {
+            const flow = document.getElementById('flowType').value;
+            const grantInput = document.getElementById('grantType');
+            
+            // Auto-fill grant types for better learning experience
+            if(flow === 'web_server') grantInput.value = 'response_type=code';
+            else if(flow === 'user_agent') grantInput.value = 'response_type=token';
+            else if(flow === 'jwt') grantInput.value = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
+            else if(flow === 'device') grantInput.value = 'response_type=device_code';
+            else if(flow === 'client_creds') grantInput.value = 'grant_type=client_credentials';
+        }
+
+        // --- 3. THE SPECTACULAR FIREWORKS ENGINE ---
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        // Resize canvas to fill screen
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function createParticle(x, y) {
+            const particleCount = 30;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    // Random colors
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    // Random velocity
+                    vx: (Math.random() - 0.5) * 10,
+                    vy: (Math.random() - 0.5) * 10,
+                    life: 100,
+                    alpha: 1
+                });
+            }
+        }
+
+        function animate() {
+            // Clear canvas with a slight trail effect
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.globalCompositeOperation = 'lighter';
+
+            particles.forEach((p, index) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life--;
+                p.alpha -= 0.01;
+                p.vy += 0.2; // Gravity
+
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.alpha;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (p.life <= 0) {
+                    particles.splice(index, 1);
+                }
+            });
+
+            requestAnimationFrame(animate);
+        }
+        
+        // Start the animation loop immediately
+        animate();
+
+        // The specific function requested to create fireworks
+        function triggerFireworks() {
+            // Create explosions at random points
+            let count = 0;
+            const interval = setInterval(() => {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * (canvas.height / 2); // Top half of screen
+                createParticle(x, y);
+                count++;
+                if(count > 10) clearInterval(interval);
+            }, 300);
+        }
+
+    </script>
+</body>
+</html>
