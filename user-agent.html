@@ -123,7 +123,7 @@
                      document.getElementById("loading-card").style = "display:none;";
                      document.getElementById("controls").style = "display:none;";
                      
-                    const cleanString = (window.location.hash).startsWith('#') ? rawString.substring(1) : rawString;
+                    const cleanString = (window.location.hash).startsWith('#') ? (window.location.hash).substring(1) : (window.location.hash);
                     const params = new URLSearchParams(cleanString);
                     const jsonObject = {};
                     params.forEach((value, key) => {
