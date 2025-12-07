@@ -331,14 +331,16 @@
         function getAccessToken(code){
            const metadata = JSON.parse(localStorage.getItem('metadata'));
            var client = new XMLHttpRequest();
-           client.open("POST",metadata.tokenUrl, true);
+           
            client.setRequestHeader("Content-Type", "application/json");
            const code_verifier = document.cookie.split('; ').find(row => row.startsWith('code_verifier='))?.split('=')[1];
            if(metadata.pkceChecked){
-                client.send("code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&code_verifier="+code_verifier+"&client_secret="+metadata.client_secret);
+               client.open("POST",metadata.tokenUrl, "?code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&code_verifier="+code_verifier+"&client_secret="+metadata.client_secret);
+        
            }else{
-                client.send("code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&client_secret="+metadata.client_secret);
+               client.open("POST",metadata.tokenUrl, "?code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&client_secret="+metadata.client_secret);     
            }
+           client.send();
            client.onreadystatechange = function() {
                if(this.readyState == 3) {
                    response = JSON.parse(client.response);
