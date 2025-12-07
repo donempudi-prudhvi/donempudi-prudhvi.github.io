@@ -171,12 +171,12 @@
 
             <div class="form-group">
                 <label for="consumerKey">Consumer Key (Client ID)</label>
-                <input type="text" id="consumerKey" placeholder="e.g., 3MVG9..." >
+                <input type="password" id="consumerKey" placeholder="e.g., 3MVG9..." >
             </div>
 
             <div class="form-group">
                 <label for="consumerSecret">Consumer Secret (Client Secret)</label>
-                <input type="text" id="consumerSecret" placeholder="Required for Web Server Flow">
+                <input type="password" id="consumerSecret" placeholder="Required for Web Server Flow">
             </div>
 
             <div class="form-group">
@@ -201,12 +201,17 @@
 
             <div class="form-group full-width">
                 <label for="authUrl">Authorization Endpoint</label>
-                <input type="text" id="authUrl" value="https://login.salesforce.com/services/oauth2/authorize">
+                <input type="text" id="authUrl" placeholder="https://login.salesforce.com/services/oauth2/authorize">
             </div>
 
             <div class="form-group full-width">
                 <label for="tokenUrl">Token Endpoint</label>
-                <input type="text" id="tokenUrl" value="https://login.salesforce.com/services/oauth2/token">
+                <input type="text" id="tokenUrl" placeholder="https://login.salesforce.com/services/oauth2/token">
+            </div>
+            
+            <div class="form-group full-width">
+                <label for="userinfo">User Info Endpoint</label>
+                <input type="text" id="userinfo" placeholder="https://login.salesforce.com/services/oauth2/userinfo">
             </div>
             
             <div class="form-group full-width">
@@ -226,9 +231,8 @@
         // --- 1. THE EMPTY OAUTH FUNCTION ---
         function startOAuthFlow() {
             console.log("OAuth Flow Initiated...");
+
             
-            // For educational engagement, we trigger fireworks on click!
-            triggerFireworks();
         }
 
         // --- 2. DYNAMIC UI HELPER (Optional for UX) ---
