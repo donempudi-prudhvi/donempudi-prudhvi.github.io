@@ -90,7 +90,7 @@
             <span class="dot three">.</span>
         </span>
   </div>
-  <p id="json"></p>
+  <p id="json" style="overflow-wrap:break-word;"></p>
   
   
 
@@ -122,7 +122,7 @@
                
                      document.getElementById("loading-card").style = "display:none;";
                      document.getElementById("controls").style = "display:none;";
-                     document.getElementById("json").textContent = (window.location.hash).replaceAll("&","\n");
+                     document.getElementById("json").textContent = (window.location.hash).replaceAll("&","\n\n");
             
            }else{
                
