@@ -330,7 +330,7 @@
         function getAccessToken(code){
            const metadata = JSON.parse(localStorage.getItem('metadata'));
            var client = new XMLHttpRequest();
-           client.open("POST", , true);
+           client.open("POST",metadata.tokenUrl, true);
            client.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
            const code_verifier = document.cookie.split('; ').find(row => row.startsWith('code_verifier='))?.split('=')[1];
            if(metadata.pkceChecked){
