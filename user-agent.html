@@ -146,8 +146,8 @@
       if(document.getElementById('responseType').value == 'token'){
          url.searchParams.set("response_type", "token");
       }
-     if(document.getElementById('responseType').value == 'id_token'){
-         url.searchParams.set("response_type", "id_token");
+     if(document.getElementById('responseType').value == 'token id_token'){
+         url.searchParams.set("response_type", "token id_token");
          url.searchParams.set("scope", "openid");
          url.searchParams.set("nonce", Date.now().toString(36) + Math.random().toString(36).substr(2));
       }
