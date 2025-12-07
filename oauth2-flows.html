@@ -362,7 +362,7 @@
             
         }
         
-        let pkceData = new Promise((resolve, reject) => {
+        const pkceData = new Promise((resolve, reject) => {
 
             var client = new XMLHttpRequest();
             client.open("GET",document.getElementById('pkceEndpoint').value, true);
@@ -423,7 +423,7 @@
             url.searchParams.set("response_type", "code");
 
             if(document.getElementById('pkce').checked){
-                pkceData().then(data=>{
+                pkceData.then(data=>{
                     url.searchParams.set("code_challenge", data.code_challenge);
                     url.searchParams.set("code_challenge_method", data.code_challenge_method);                    
                 }).catch(error=>{
