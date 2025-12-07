@@ -281,7 +281,7 @@
             
             <div class="form-group full-width">
                 <div class="checkbox-group">
-                    <input type="checkbox" id="pkce" onchange=togglePKCE()>
+                    <input type="checkbox" id="pkce" onchange="togglePKCE(this)">
                     <label for="pkce" style="margin-bottom:0; cursor:pointer;">Enable PKCE (Proof Key for Code Exchange)</label>
                 </div>
                 <small style="color:#666; margin-left: 35px;">Recommended for public clients (Mobile/SPA) to prevent code interception.</small>
@@ -371,8 +371,8 @@
     
         })
 
-        function togglePKCE(){
-            if(document.getElementById('pkce').checked){
+        function togglePKCE(checkbox){
+            if(checkbox.checked){
                 document.getElementById('pkceurl').style = "display:block;"
                 document.getElementById('pkceurl').setAttribute("required",true);        
  
