@@ -314,7 +314,7 @@
         if(urlParams.size>0){
                 //token callback
                 if (urlParams.get('code')!=null && urlParams.get('code') != '') {
-                document.getElementById("loading-card").style = "display:block;";
+                document.getElementById("loading-card").style = "display:flex;";
                 document.getElementById("form-grid").style = "display:none;";
                 getAccessToken(urlParams.get('code'));
                 
@@ -373,7 +373,7 @@
 
         function togglePKCE(checkbox){
             if(checkbox.checked){
-                document.getElementById('pkceurl').style = "display:block;"
+                document.getElementById('pkceurl').style = "display:flex;"
                 document.getElementById('pkceurl').setAttribute("required",true);        
  
             }else{
