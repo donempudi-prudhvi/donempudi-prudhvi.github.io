@@ -365,8 +365,10 @@
         
         const pkceData = new Promise((resolve, reject) => {
 
+            
+
             var client = new XMLHttpRequest();
-            client.open("GET",document.getElementById('pkceEndpoint').value, true);
+            client.open("GET",document.getElementById('pkceendpoint').value, true);
             client.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
             client.send();
             client.onreadystatechange = function() {
