@@ -350,6 +350,7 @@
         }
 
         function getUserDetails(userinfoendpoint,accessToken){
+        var client = new XMLHttpRequest();
            client.open("POST",userinfoendpoint, true);
            client.setRequestHeader("Content-Type", "application/json");
            client.setRequestHeader("Authorization", "Bearer "+accessToken);
