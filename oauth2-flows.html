@@ -217,6 +217,7 @@
        </div>
 
         <p id="json" style="overflow-wrap:break-word;"></p>
+        <p id="jsonuser" style="overflow-wrap:break-word;"></p>
 
         <div class="form-grid" id="form-grid">
             
@@ -331,7 +332,7 @@
            const metadata = JSON.parse(localStorage.getItem('metadata'));
            var client = new XMLHttpRequest();
            client.open("POST",metadata.tokenUrl, true);
-           client.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+           client.setRequestHeader("Content-Type", "application/json");
            const code_verifier = document.cookie.split('; ').find(row => row.startsWith('code_verifier='))?.split('=')[1];
            if(metadata.pkceChecked){
                 client.send("code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&code_verifier="+code_verifier+"&client_secret="+metadata.client_secret);
@@ -342,9 +343,23 @@
                if(this.readyState == 3) {
                    response = JSON.parse(client.response);
                    document.getElementById("loading-card").style = "display:none;";
-                   document.getElementById("json").textContent = JSON.stringify(response, undefined, 2);;
+                   getUserDetails(metadata.userinfourl,response.access_token);
+                   document.getElementById("json").textContent = "OAuth Flow Name : "+ metadata.currentFlow + '\n' +  JSON.stringify(response, undefined, 2);
                }
            }
+        }
+
+        function getUserDetails(userinfoendpoint,accessToken){
+           client.open("POST",userinfoendpoint, true);
+           client.setRequestHeader("Content-Type", "application/json");
+           client.setRequestHeader("Authorization", "Bearer "+accessToken);
+            client.onreadystatechange = function() {
+               if(this.readyState == 3) {
+                   response = JSON.parse(client.response);
+                   document.getElementById("jsonuser").textContent = "User Info Details : \n" + JSON.stringify(response, undefined, 2);
+               }
+            }
+            
         }
         
         let pkceData = new Promise((resolve, reject) => {
@@ -397,6 +412,7 @@
                 'tokenUrl' :  tokenUrl,
                 'userinfourl' : userinfourl,
                 'pkceChecked' : document.getElementById('pkce').checked
+                'currentFlow' : document.getElementById('flowType').value;
             };
             
             localStorage.setItem('metadata', JSON.stringify(metadata));
