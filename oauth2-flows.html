@@ -333,10 +333,10 @@
            var client = new XMLHttpRequest();
            const code_verifier = document.cookie.split('; ').find(row => row.startsWith('code_verifier='))?.split('=')[1];
            if(metadata.pkceChecked){
-               client.open("POST",metadata.tokenUrl, "?code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&code_verifier="+code_verifier+"&client_secret="+metadata.client_secret);
+               client.open("POST",metadata.tokenUrl+ "?code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&code_verifier="+code_verifier+"&client_secret="+metadata.client_secret,true);
         
            }else{
-               client.open("POST",metadata.tokenUrl, "?code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&client_secret="+metadata.client_secret);     
+               client.open("POST",metadata.tokenUrl+ "?code=" + code + "&grant_type=authorization_code&client_id=" + metadata.clientId + "&redirect_uri=" + metadata.redirectURL +"&client_secret="+metadata.client_secret,true);     
            }
            client.setRequestHeader("Content-Type", "application/json");
            client.send();
