@@ -122,7 +122,16 @@
                
                      document.getElementById("loading-card").style = "display:none;";
                      document.getElementById("controls").style = "display:none;";
-                     document.getElementById("json").textContent = (window.location.hash).replaceAll("&","\n\n");
+                     
+                    const cleanString = (window.location.hash).startsWith('#') ? rawString.substring(1) : rawString;
+                    const params = new URLSearchParams(cleanString);
+                    const jsonObject = {};
+                    params.forEach((value, key) => {
+                        jsonObject[key] = value;
+                    });
+                    const prettyJson = JSON.stringify(jsonObject, null, 4);
+                    document.getElementById('jsonDisplay').innerText = prettyJson;
+                    document.getElementById("json").textContent = prettyJson;
             
            }else{
                
