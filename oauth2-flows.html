@@ -365,27 +365,28 @@
         
         const pkceData = new Promise((resolve, reject) => {
 
-            
-
-            var client = new XMLHttpRequest();
-            client.open("GET",document.getElementById('pkceendpoint').value, true);
-            client.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-            client.send();
-            client.onreadystatechange = function() {
-                if(this.readyState == 3) {
-                response = JSON.parse(client.response);
-                code_challenge = response.code_challenge;
-                code_verifier = response.code_verifier;
-                code_challenge_method = response.code_challenge_method;
-                const d = new Date();
-                d.setTime(d.getTime() + (10 * 60 * 1000));
-                const expires = "expires=" + d.toUTCString();
-                document.cookie = "code_verifier=" + code_verifier + ";" + expires + ";path=/";
-                resolve({'code_challenge': response.code_challenge,'code_challenge_method':response.code_challenge_method});
-                }else{
-                    reject('something went wrong');
+            if(document.getElementById('pkceendpoint').value!=null && document.getElementById('pkceendpoint').value != ''){
+                var client = new XMLHttpRequest();
+                client.open("GET",document.getElementById('pkceendpoint').value, true);
+                client.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                client.send();
+                client.onreadystatechange = function() {
+                    if(this.readyState == 3) {
+                    response = JSON.parse(client.response);
+                    code_challenge = response.code_challenge;
+                    code_verifier = response.code_verifier;
+                    code_challenge_method = response.code_challenge_method;
+                    const d = new Date();
+                    d.setTime(d.getTime() + (10 * 60 * 1000));
+                    const expires = "expires=" + d.toUTCString();
+                    document.cookie = "code_verifier=" + code_verifier + ";" + expires + ";path=/";
+                    resolve({'code_challenge': response.code_challenge,'code_challenge_method':response.code_challenge_method});
+                    }else{
+                        reject('something went wrong');
+                    }
                 }
             }
+            
     
         })
 
