@@ -87,7 +87,7 @@
   </div>
 
   <script>
-    //show loading by default
+    
 
     document.getElementById("loading-card").style = "display:none;";
     document.getElementById("controls").style = "display:block;";
@@ -103,83 +103,33 @@
                      document.getElementById("json").textContent = JSON.stringify(window.location.hash, undefined, 2);
             
            }else{
-                //window.location.href = redirectURL; 
-                //document.getElementById("json").textContent = 'Please <a href=>click here</a> to re initilise the flow.'
+               
            }
-           // else{
-           //   document.getElementById("controls").style = "display:block;";
-           //   var client = new XMLHttpRequest();
-           //   client.open("GET",pkceEndpoint, true);
-           //   client.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-           //   client.send();
-           //   client.onreadystatechange = function() {
-           //       if(this.readyState == 3) {
-           //           response = JSON.parse(client.response);
-           //           code_challenge = response.code_challenge;
-           //           code_verifier = response.code_verifier;
-           //           code_challenge_method = response.code_challenge_method;
-           //           const d = new Date();
-           //           d.setTime(d.getTime() + (10 * 60 * 1000));
-           //           const expires = "expires=" + d.toUTCString();
-           //           document.cookie = "code_verifier=" + code_verifier + ";" + expires + ";path=/";
-                   
-           //       }
-           //   }
-           // }
+
              
         };
 
     var myDomain = "https://prudhvi-demo-org--developer.sandbox.my.salesforce.com";
     var clientId = "3MVG9D68eYs7112EIiIQ.W2PxF2vNPnsYGxnz0b_XTA26GSH.lcfDbpK73Qr706vUs3P2l_iyZMby9qb7bywh";
-    //var clientSecret = "470F543CCC15F073E4C1A1BB5A33F01EA8B3C386BADCA153EC607D510C5BCB11";
-    //var redirectURL = "https://prudhvi-demo-org--developer.sandbox.my.site.com/testlwrvforcesite/services/oauth2/echo";
-    var redirectURL = "https://prudhvi-demo-org--developer.sandbox.my.salesforce.com/services/oauth2/success";
-    //var pkceEndpoint = "https://prudhvi-demo-org--developer.sandbox.my.salesforce.com/services/oauth2/pkce/generator";
-    //var code_challenge;
-    //var code_verifier;
-    //var code_challenge_method = "S256";
+    var redirectURL = "https://donempudi-prudhvi.github.io/user-agent.html";
+
 
    function initateAuthorization(){
        
-       // var client = new XMLHttpRequest();
-       // client.open("POST", myDomain + "/services/oauth2/authorize", true);
-       // client.send("client_id="+clientId+"&redirect_uri="+redirectURL+"&response_type=code&code_challenge="+code_challenge+"&display=popup");
-       // client.onreadystatechange = function() {
-       //     if(this.readyState == 3) {
-       //         response = JSON.parse(client.response);
-       //         console.log(response)
-       //     }
-       // }
+
       const url = new URL("/services/oauth2/authorize", myDomain);
       
       url.searchParams.set("client_id", clientId);
       url.searchParams.set("redirect_uri", redirectURL);
       url.searchParams.set("response_type", "token");
-      url.searchParams.set("scope", "refresh_token");
-      //url.searchParams.set("code_challenge", code_challenge);
-  
+      //url.searchParams.set("scope", "refresh_token");
+      
      window.location.href = url.toString();
 
 
    }
 
-   // function getAccessToken(code){
 
-   //          var client = new XMLHttpRequest();
-   //         client.open("POST", myDomain + "/services/oauth2/token", true);
-   //         client.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-   //         const code_verifier = document.cookie.split('; ').find(row => row.startsWith('code_verifier='))?.split('=')[1];
-   //         client.send("code=" + code + "&grant_type=authorization_code&client_id=" + clientId + "&redirect_uri=" + redirectURL +"&code_verifier="+code_verifier+"&client_secret="+clientSecret);
-   //         client.onreadystatechange = function() {
-   //             if(this.readyState == 3) {
-   //                 response = JSON.parse(client.response);
-   //                 console.log(response);
-   //                 document.getElementById("loading-card").style = "display:none;";
-   //                 document.getElementById("controls").style = "display:none;";
-   //                 document.getElementById("json").textContent = JSON.stringify(response, undefined, 5);
-   //             }
-   //         }
-   //      }
     
     
   
