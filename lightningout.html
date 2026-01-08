@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lightning Out 2.0 Demo</title>
+    
+    <script type="text/javascript" src="https://prudhvi-demo-org--devenv.sandbox.my.salesforce.com/lightning/lightning.out.latest/index.iife.prod.js"></script>
+
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 30px; background: #f0f2f5; }
+        .setup-card { max-width: 700px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .field { margin-bottom: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 6px; color: #333; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
+        button { background: #0176d3; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; font-weight: bold; }
+        button:hover { background: #014486; }
+        #lwc-placeholder { margin-top: 30px; min-height: 100px; }
+        .info { font-size: 0.85rem; color: #666; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="setup-card">
+    <h2>Lightning Out 2.0 Setup</h2>
+    
+    <div class="field">
+        <label>Lightning Out App ID</label>
+        <input type="text" id="appId" placeholder="18-digit Salesforce ID (from Setup > Lightning Out 2.0 App Manager)">
+        <div class="info">The ID of your configured Lightning Out 2.0 App.</div>
+    </div>
+
+    <div class="field">
+        <label>Frontdoor URL</label>
+        <input type="text" id="frontdoorUrl" placeholder="https://.../secur/frontdoor.jsp?sid=...">
+        <div class="info">Obtained via the OAuth 2.0 singleaccess endpoint.</div>
+    </div>
+
+    <button id="renderBtn">Mount c-hello-component</button>
+
+    <div id="lwc-placeholder"></div>
+</div>
+
+<script>
+    document.getElementById('renderBtn').addEventListener('click', function() {
+        const appId = document.getElementById('appId').value;
+        const frontdoor = document.getElementById('frontdoorUrl').value;
+        const placeholder = document.getElementById('lwc-placeholder');
+
+        if (!appId || !frontdoor) {
+            alert("Please provide both the App ID and the Frontdoor URL.");
+            return;
+        }
+
+        // In 2.0, we use a declarative custom element
+        // We create it dynamically here to respond to the button click
+        const loApp = document.createElement('lightning-out-application');
+        
+        loApp.setAttribute('app-id', appId);
+        loApp.setAttribute('frontdoor-url', frontdoor);
+        
+        // Comma-separated list of components you want to use
+        loApp.setAttribute('components', 'c-hello-component');
+
+        // Optional: Listen for the app to be ready
+        loApp.addEventListener('application.ready', () => {
+            console.log("Lightning Out 2.0 Connection Established!");
+            
+            // Now we create the specific LWC component
+            const myComponent = document.createElement('c-hello-component');
+            // Inject into the placeholder
+            placeholder.appendChild(myComponent);
+        });
+
+        loApp.addEventListener('application.error', (event) => {
+            console.error("LO 2.0 Error:", event.detail.message);
+            alert("Failed to initialize: " + event.detail.message);
+        });
+
+        // Add the config element to the body to trigger initialization
+        document.body.appendChild(loApp);
+    });
+</script>
+
+</body>
+</html>
