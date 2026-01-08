@@ -36,7 +36,7 @@
         <div class="info">Obtained via the OAuth 2.0 singleaccess endpoint.</div>
     </div>
 
-    <button id="renderBtn">Mount c-hello-component</button>
+    <button id="renderBtn">Inititate Session</button>
 
     <div id="lwc-placeholder"></div>
 </div>
@@ -65,11 +65,7 @@
         // Optional: Listen for the app to be ready
         loApp.addEventListener('application.ready', () => {
             console.log("Lightning Out 2.0 Connection Established!");
-            
-            // Now we create the specific LWC component
-            const myComponent = document.createElement('c-hello-component');
-            // Inject into the placeholder
-            placeholder.appendChild(myComponent);
+    
         });
 
         loApp.addEventListener('application.error', (event) => {
@@ -81,6 +77,8 @@
         document.body.appendChild(loApp);
     });
 </script>
+
+    <c-hello-component></c-hello-component>
 
 </body>
 </html>
