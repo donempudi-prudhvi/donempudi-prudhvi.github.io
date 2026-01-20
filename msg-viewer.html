@@ -3,64 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSG Viewer Pro</title>
+    <title>MSG File Reader</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@kenjiuno/msgreader@1.23.0/lib/MsgReader.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/ykarpovich/msg.js@master/dist/msg.js"></script>
     <style>
-        .drop-zone { border: 2px dashed #cbd5e1; transition: all 0.2s ease; }
-        .drop-zone.hover { border-color: #3b82f6; background-color: #f8fafc; transform: scale(1.01); }
-        #email-body-content { all: revert; } /* Reset tailwind for email content */
+        .custom-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+        #email-content img { max-width: 100%; height: auto; }
+        #email-content { font-family: ui-sans-serif, system-ui, sans-serif; }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-4 md:p-10 font-sans">
+<body class="bg-slate-100 min-h-screen py-12 px-4">
 
-    <div class="max-w-4xl mx-auto">
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="p-8 bg-white border-b border-gray-100">
-                <h1 class="text-2xl font-extrabold text-gray-800">MSG Interpreter</h1>
-                <p class="text-gray-500 text-sm mt-1">Standalone offline-capable Outlook message viewer.</p>
-            </div>
-
-            <div id="drop-zone" class="m-8 drop-zone rounded-xl p-12 flex flex-col items-center justify-center cursor-pointer">
-                <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mb-4">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+    <div class="max-w-3xl mx-auto">
+        <div class="bg-white rounded-2xl custom-shadow overflow-hidden">
+            
+            <div class="bg-slate-800 p-6 text-white flex items-center justify-between">
+                <div>
+                    <h1 class="text-xl font-bold">MSG Interpreter</h1>
+                    <p class="text-slate-400 text-xs">Local Browser-Based Parsing</p>
                 </div>
-                <p class="text-gray-700 font-semibold text-lg">Select or Drag an .msg file</p>
-                <p class="text-gray-400 text-sm mt-1">Everything stays in your browser</p>
-                <input type="file" id="file-input" class="hidden" accept=".msg">
+                <div class="h-10 w-10 bg-slate-700 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
             </div>
 
-            <div id="viewer" class="hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div class="p-8 space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
-                        <div class="col-span-2">
-                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Subject</label>
-                            <div id="out-subject" class="text-lg font-bold text-gray-900 leading-tight"></div>
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">From</label>
-                            <div id="out-from" class="text-sm text-gray-700 truncate"></div>
-                        </div>
-                        <div>
-                            <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Recipients</label>
-                            <div id="out-to" class="text-sm text-gray-700 truncate"></div>
-                        </div>
+            <div id="upload-container" class="p-10 text-center">
+                <div id="drop-zone" class="border-2 border-dashed border-slate-300 rounded-xl py-16 px-4 hover:border-blue-500 hover:bg-blue-50 transition-all cursor-pointer group">
+                    <input type="file" id="file-input" class="hidden" accept=".msg">
+                    <div class="bg-blue-100 text-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                     </div>
+                    <p class="text-slate-700 font-semibold text-lg">Click to select .msg file</p>
+                    <p class="text-slate-400 text-sm mt-2">or drag and drop here</p>
+                </div>
+            </div>
 
+            <div id="viewer" class="hidden divide-y divide-slate-100">
+                <div class="p-6 bg-slate-50 space-y-4">
                     <div>
-                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-3">Message Body</label>
-                        <div id="email-body-container" class="bg-white border border-gray-200 rounded-xl p-6 min-h-[300px] overflow-auto shadow-inner">
-                            <div id="email-body-content"></div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Subject</span>
+                        <h2 id="view-subject" class="text-xl font-bold text-slate-800"></h2>
+                    </div>
+                    <div class="flex flex-wrap gap-8">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">From</span>
+                            <p id="view-from" class="text-sm text-slate-600"></p>
+                        </div>
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">To</span>
+                            <p id="view-to" class="text-sm text-slate-600"></p>
                         </div>
                     </div>
+                </div>
 
-                    <div id="attach-area" class="hidden">
-                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-3">Attachments</label>
-                        <div id="attach-list" class="flex flex-wrap gap-3"></div>
-                    </div>
+                <div class="p-6">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-4">Message Content</span>
+                    <div id="email-content" class="bg-white rounded-lg border border-slate-200 p-6 min-h-[200px] overflow-auto text-slate-800 leading-relaxed">
+                        </div>
+                </div>
 
-                    <button onclick="location.reload()" class="w-full py-4 text-gray-500 hover:text-gray-800 text-sm font-medium transition-colors">
-                        ← Close and Upload New File
+                <div id="attachment-area" class="p-6 hidden bg-slate-50">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Attachments</span>
+                    <div id="attachment-list" class="flex flex-wrap gap-2"></div>
+                </div>
+
+                <div class="p-4 bg-white text-center">
+                    <button onclick="window.location.reload()" class="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
+                        Clear and view another file
                     </button>
                 </div>
             </div>
@@ -71,53 +80,73 @@
         const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
 
-        // Logic to fix "MSGReader is not a constructor"
-        function getMsgReader() {
-            // Some CDNs put it in MsgReader, others in window.MsgReader, others in .default
-            if (typeof MsgReader === 'function') return MsgReader;
-            if (window.MsgReader && typeof window.MsgReader === 'function') return window.MsgReader;
-            if (window.MsgReader && typeof window.MsgReader.default === 'function') return window.MsgReader.default;
-            return null;
-        }
-
         dropZone.onclick = () => fileInput.click();
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('hover'); };
-        dropZone.ondragleave = () => dropZone.classList.remove('hover');
-        dropZone.ondrop = (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('hover');
-            if (e.dataTransfer.files.length) processFile(e.dataTransfer.files[0]);
-        };
+        
+        // Setup Drag & Drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evt => {
+            dropZone.addEventListener(evt, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            }, false);
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            if (files.length) handleFileUpload(files[0]);
+        });
 
         fileInput.onchange = (e) => {
-            if (e.target.files.length) processFile(e.target.files[0]);
+            if (e.target.files.length) handleFileUpload(e.target.files[0]);
         };
 
-        function processFile(file) {
+        function handleFileUpload(file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function(event) {
                 try {
-                    const Constructor = getMsgReader();
-                    if (!Constructor) {
-                        throw new Error("Library failed to load. Please check your internet connection.");
-                    }
+                    // This library uses the MSGReader global
+                    const msgReader = new MSGReader(event.target.result);
+                    const data = msgReader.getFileData();
 
-                    const msgReader = new Constructor(e.target.result);
-                    const fileData = msgReader.getFileData();
-                    renderUI(fileData);
+                    if (!data) throw new Error("Invalid or empty MSG file.");
+                    renderEmail(data);
                 } catch (err) {
                     console.error(err);
-                    alert("Error parsing file: " + err.message);
+                    alert("Error: " + err.message);
                 }
             };
             reader.readAsArrayBuffer(file);
         }
 
-        function renderUI(data) {
-            document.getElementById('drop-zone').classList.add('hidden');
+        function renderEmail(data) {
+            document.getElementById('upload-container').classList.add('hidden');
             document.getElementById('viewer').classList.remove('hidden');
 
-            document.getElementById('out-subject').textContent = data.subject || "(No Subject)";
-            document.getElementById('out-from').textContent = `${data.senderName || ''} <${data.senderEmail || ''}>`;
+            document.getElementById('view-subject').innerText = data.subject || "(No Subject)";
+            document.getElementById('view-from').innerText = `${data.senderName || ''} <${data.senderEmail || ''}>`;
             
-            const tos = data.rec
+            const recipients = data.recipients ? data.recipients.map(r => r.name || r.email).join(', ') : 'None';
+            document.getElementById('view-to').innerText = recipients;
+
+            const bodyDiv = document.getElementById('email-content');
+            if (data.bodyHTML) {
+                bodyDiv.innerHTML = data.bodyHTML;
+            } else {
+                bodyDiv.innerText = data.body || "Empty body.";
+            }
+
+            // Attachments Logic
+            if (data.attachments && data.attachments.length > 0) {
+                document.getElementById('attachment-area').classList.remove('hidden');
+                const list = document.getElementById('attachment-list');
+                list.innerHTML = '';
+                data.attachments.forEach(att => {
+                    const item = document.createElement('div');
+                    item.className = "flex items-center gap-2 bg-white border border-slate-200 px-3 py-1.5 rounded-md text-xs font-medium text-slate-600";
+                    item.innerHTML = `<span>📎</span> ${att.fileName || 'Attachment'}`;
+                    list.appendChild(item);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
