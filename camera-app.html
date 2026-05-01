@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <video id="player" autoplay style="width: 100%; max-width: 400px;"></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <button onclick="capture()">Take Photo</button>
+
+    <script>
+        const player = document.getElementById('player');
+        const canvas = document.getElementById('canvas');
+
+        // Start the camera stream
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => { player.srcObject = stream; })
+            .catch(err => console.error("Camera error:", err));
+
+        function capture() {
+            const context = canvas.getContext('2d');
+            canvas.width = player.videoWidth;
+            canvas.height = player.videoHeight;
+            context.drawImage(player, 0, 0);
+
+            // Convert image to Base64
+            const imageData = canvas.toDataURL('image/png');
+
+            // CRITICAL: Send data to LWC
+            // Replace '*' with your Salesforce domain for better security
+            window.parent.postMessage({
+                source: 'my-github-camera',
+                payload: imageData
+            }, '*');
+        }
+    </script>
+</body>
+</html>
