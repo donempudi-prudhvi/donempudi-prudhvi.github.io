@@ -1,169 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSG Explorer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script src="https://unpkg.com/@pivonaze/msg-reader@1.1.0/dist/MSGReader.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MSG File Reader</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/CFB/1.2.2/cfb.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <style>
-        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
-        .drop-zone.active { border-color: #3b82f6; background-color: #f0f7ff; }
-        #email-body-content { font-family: sans-serif; line-height: 1.6; }
-        #email-body-content img { max-width: 100%; height: auto; }
-    </style>
+    :root {
+      --bg: #0f0f11;
+      --surface: #18181c;
+      --border: #2a2a32;
+      --accent: #7ee8a2;
+      --accent2: #38bdf8;
+      --muted: #555566;
+      --text: #e8e8f0;
+      --text-dim: #9999aa;
+      --radius: 10px;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --font-sans: 'IBM Plex Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.2rem;
+    }
+
+    header h1 {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 1.3rem;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+
+    header span {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    .drop-zone {
+      width: 100%;
+      max-width: 800px;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 3rem 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+      background: var(--surface);
+    }
+
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: var(--accent);
+      background: #1a1a20;
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .drop-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      filter: grayscale(0.3);
+    }
+
+    .drop-zone h2 {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    .drop-zone p {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+    }
+
+    #result {
+      width: 100%;
+      max-width: 800px;
+      margin-top: 2rem;
+      display: none;
+      flex-direction: column;
+      gap: 1px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .msg-field {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      background: var(--surface);
+    }
+
+    .msg-field + .msg-field { border-top: 1px solid var(--border); }
+
+    .field-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent2);
+      padding: 0.75rem 1rem;
+      background: #13131a;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: flex-start;
+      padding-top: 0.9rem;
+    }
+
+    .field-value {
+      font-size: 0.88rem;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      word-break: break-word;
+      line-height: 1.5;
+    }
+
+    .field-value.mono {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    .body-section {
+      background: var(--surface);
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+
+    .body-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.75rem 1rem 0;
+      background: #13131a;
+      border-top: 1px solid var(--border);
+    }
+
+    .body-content {
+      padding: 1rem;
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .body-content::-webkit-scrollbar { width: 6px; }
+    .body-content::-webkit-scrollbar-track { background: transparent; }
+    .body-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    .attachments-row {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+    }
+
+    .attach-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .attach-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .attach-chip {
+      background: #1e1e28;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.3rem 0.7rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .attach-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    #error-msg {
+      display: none;
+      width: 100%;
+      max-width: 800px;
+      margin-top: 1.5rem;
+      padding: 1rem 1.2rem;
+      background: #1f0e0e;
+      border: 1px solid #5a1a1a;
+      border-radius: var(--radius);
+      color: #f87171;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+    }
+
+    footer {
+      margin-top: 4rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+  </style>
 </head>
-<body class="bg-gradient-to-br from-slate-100 to-slate-200 min-h-screen p-6 font-sans">
+<body>
 
-    <div class="max-w-4xl mx-auto">
-        <div id="lib-status" class="mb-4 text-center hidden">
-            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">
-                ⚠️ Error: Parsing Library not loaded. Check connection.
-            </span>
-        </div>
+<header>
+  <h1>msg-reader</h1>
+  <span>// outlook .msg viewer — runs locally, no upload</span>
+</header>
 
-        <div class="glass-card rounded-3xl shadow-2xl border border-white overflow-hidden">
-            <div class="p-8 border-b border-slate-100 flex items-center justify-between bg-white">
-                <div>
-                    <h1 class="text-2xl font-black text-slate-800 tracking-tight">MSG Interpreter</h1>
-                    <p class="text-slate-500 text-sm">Secure, Private, Browser-side Analysis</p>
-                </div>
-                <div class="hidden sm:block text-right">
-                    <span class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded uppercase">Local Mode</span>
-                </div>
-            </div>
+<div class="drop-zone" id="dropZone">
+  <input type="file" id="fileInput" accept=".msg" />
+  <div class="drop-icon">📨</div>
+  <h2>Drop a .msg file here</h2>
+  <p>or click to browse — file never leaves your browser</p>
+</div>
 
-            <div id="upload-box" class="p-12">
-                <div id="drop-zone" class="border-3 border-dashed border-slate-200 rounded-2xl py-20 px-4 text-center hover:border-blue-400 hover:bg-slate-50 transition-all cursor-pointer group">
-                    <input type="file" id="file-input" class="hidden" accept=".msg">
-                    <div class="text-slate-300 group-hover:text-blue-500 transition-colors mb-4 flex justify-center">
-                        <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-                    </div>
-                    <h2 class="text-xl font-bold text-slate-700">Drop Outlook MSG file here</h2>
-                    <p class="text-slate-400 mt-2">or click to browse your computer</p>
-                </div>
-            </div>
+<div id="error-msg"></div>
+<div id="result"></div>
 
-            <div id="viewer" class="hidden animate-in fade-in zoom-in-95 duration-300">
-                <div class="p-8 space-y-8">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 col-span-2">
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Subject</p>
-                            <h3 id="msg-subject" class="text-xl font-bold text-slate-800"></h3>
-                        </div>
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">From</p>
-                            <p id="msg-from" class="text-sm font-medium text-slate-700"></p>
-                        </div>
-                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Recipients</p>
-                            <p id="msg-to" class="text-sm font-medium text-slate-700"></p>
-                        </div>
-                    </div>
+<footer>built with cfb.js · client-side only · no data sent anywhere</footer>
 
-                    <div>
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Message Content</p>
-                        <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-inner min-h-[300px]" id="email-body-content">
-                        </div>
-                    </div>
+<script>
+// ── PROPERTY ID MAP (subset of MAPI props) ──────────────────────────
+const PROPS = {
+  '0037': 'Subject',
+  '0c1a': 'Sender Name',
+  '0c1f': 'Sender Email',
+  '0e04': 'To',
+  '0e03': 'CC',
+  '0e02': 'BCC',
+  '0039': 'Date Sent',
+  '003d': 'In-Reply-To',
+  '1000': 'Body (Plain)',
+  '1013': 'Body (HTML)',
+  '0070': 'Conversation Topic',
+  '0071': 'Conversation Index',
+  '0064': 'Sent Representing Name',
+  '0065': 'Sent Representing Email',
+};
 
-                    <div id="attach-section" class="hidden">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 px-1">Attachments</p>
-                        <div id="attach-list" class="flex flex-wrap gap-2"></div>
-                    </div>
+// ── HELPERS ─────────────────────────────────────────────────────────
+function readUTF16LE(buffer) {
+  const arr = new Uint8Array(buffer);
+  let s = '';
+  for (let i = 0; i + 1 < arr.length; i += 2) {
+    const code = arr[i] | (arr[i+1] << 8);
+    if (code === 0) break;
+    s += String.fromCodePoint(code);
+  }
+  return s;
+}
 
-                    <button onclick="location.reload()" class="w-full py-4 bg-slate-800 text-white rounded-xl font-bold hover:bg-black transition-colors shadow-lg">
-                        Interpret Another File
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+function readUTF8(buffer) {
+  try { return new TextDecoder('utf-8').decode(new Uint8Array(buffer)); }
+  catch { return '(decode error)'; }
+}
 
-    <script>
-        // Use a safe check for the constructor
-        function getConstructor() {
-            return window.MSGReader || (window.exports && window.exports.MSGReader);
-        }
+function parseMsgDate(buffer) {
+  // FILETIME = 100-nanosecond intervals since 1601-01-01
+  const view = new DataView(buffer);
+  const lo = view.getUint32(0, true);
+  const hi = view.getUint32(4, true);
+  const bigInt = (BigInt(hi) << 32n) | BigInt(lo >>> 0);
+  const epochMs = Number(bigInt / 10000n) - 11644473600000;
+  if (isNaN(epochMs) || epochMs < 0) return null;
+  return new Date(epochMs).toLocaleString();
+}
 
-        // Library availability check on load
-        window.addEventListener('load', () => {
-            if (!getConstructor()) {
-                document.getElementById('lib-status').classList.remove('hidden');
-            }
+// ── CORE PARSER ─────────────────────────────────────────────────────
+function parseMSG(arrayBuffer) {
+  const cfb = CFB.read(arrayBuffer, { type: 'array' });
+
+  const fields = {};
+  const attachments = [];
+
+  for (const entry of cfb.FileIndex) {
+    const name = entry.name;
+
+    // Named property stream for body/subject etc.
+    const propMatch = name.match(/^__substg1\.0_([0-9A-Fa-f]{4})([0-9A-Fa-f]{4})$/);
+    if (propMatch) {
+      const propId = propMatch[1].toLowerCase();
+      const typeCode = propMatch[2].toLowerCase();
+      const data = entry.content ? entry.content.buffer || new Uint8Array(entry.content).buffer : null;
+      if (!data || data.byteLength === 0) continue;
+
+      let value = null;
+      if (typeCode === '001f' || typeCode === '001e') {
+        // PT_UNICODE or PT_STRING8
+        value = typeCode === '001f' ? readUTF16LE(data) : readUTF8(data);
+      } else if (typeCode === '0040') {
+        value = parseMsgDate(data);
+      } else if (typeCode === '0102') {
+        value = `[binary, ${data.byteLength} bytes]`;
+      }
+
+      if (value !== null && PROPS[propId]) {
+        fields[PROPS[propId]] = value;
+      }
+      continue;
+    }
+
+    // Attachments
+    const attachDir = name.match(/^__attach_version1\.0_#([0-9A-F]+)$/i);
+    if (attachDir) {
+      attachments.push({ index: attachDir[1], filename: null, data: null, size: 0 });
+    }
+
+    // Attachment filename
+    const attachName = name.match(/^__attach_version1\.0_#([0-9A-F]+)\/__substg1\.0_(3704|3707)001[Ff]/i);
+    if (attachName) {
+      const idx = attachName[1];
+      const data = entry.content ? entry.content.buffer || new Uint8Array(entry.content).buffer : null;
+      const fn = data ? readUTF16LE(data).trim() : '(unknown)';
+      const a = attachments.find(x => x.index === idx) || { index: idx, filename: null, data: null, size: 0 };
+      if (!attachments.includes(a)) attachments.push(a);
+      if (!a.filename) a.filename = fn;
+    }
+
+    // Attachment data
+    const attachData = name.match(/^__attach_version1\.0_#([0-9A-F]+)\/__substg1\.0_37010102/i);
+    if (attachData) {
+      const idx = attachData[1];
+      const a = attachments.find(x => x.index === idx);
+      if (a && entry.content) {
+        a.data = entry.content;
+        a.size = entry.content.length || entry.content.byteLength || 0;
+      }
+    }
+  }
+
+  return { fields, attachments };
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────
+function renderResult({ fields, attachments }) {
+  const el = document.getElementById('result');
+  el.innerHTML = '';
+  el.style.display = 'flex';
+
+  const ORDER = ['Subject','Sender Name','Sender Email','Sent Representing Name',
+    'Sent Representing Email','To','CC','BCC','Date Sent','Conversation Topic'];
+
+  for (const key of ORDER) {
+    if (!fields[key]) continue;
+    const row = document.createElement('div');
+    row.className = 'msg-field';
+    row.innerHTML = `<div class="field-label">${key}</div><div class="field-value">${escHtml(fields[key])}</div>`;
+    el.appendChild(row);
+  }
+
+  // Body (prefer plain text)
+  const body = fields['Body (Plain)'] || fields['Body (HTML)'] || '';
+  if (body) {
+    const isHTML = !fields['Body (Plain)'] && fields['Body (HTML)'];
+    const section = document.createElement('div');
+    section.className = 'body-section';
+    section.innerHTML = `<div class="body-label">Body${isHTML ? ' (HTML)' : ''}</div>`;
+    const content = document.createElement('div');
+    content.className = 'body-content';
+    if (isHTML) {
+      // Render stripped text version of HTML body
+      const tmp = document.createElement('div');
+      tmp.innerHTML = body;
+      content.textContent = tmp.innerText || tmp.textContent;
+    } else {
+      content.textContent = body;
+    }
+    section.appendChild(content);
+    el.appendChild(section);
+  }
+
+  // Attachments
+  const validAttach = attachments.filter(a => a.filename || a.data);
+  if (validAttach.length) {
+    const row = document.createElement('div');
+    row.className = 'attachments-row';
+    row.innerHTML = `<div class="attach-label">Attachments (${validAttach.length})</div>`;
+    const list = document.createElement('div');
+    list.className = 'attach-list';
+    for (const a of validAttach) {
+      const chip = document.createElement('div');
+      chip.className = 'attach-chip';
+      const name = a.filename || `attachment_${a.index}`;
+      chip.textContent = `📎 ${name}${a.size ? ` (${(a.size/1024).toFixed(1)}KB)` : ''}`;
+      if (a.data) {
+        chip.title = 'Click to download';
+        chip.addEventListener('click', () => {
+          const blob = new Blob([new Uint8Array(a.data)]);
+          const url = URL.createObjectURL(blob);
+          const anchor = document.createElement('a');
+          anchor.href = url;
+          anchor.download = name;
+          anchor.click();
+          URL.revokeObjectURL(url);
         });
+      }
+      list.appendChild(chip);
+    }
+    row.appendChild(list);
+    el.appendChild(row);
+  }
+}
 
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 
-        dropZone.onclick = () => fileInput.click();
-        dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('active'); };
-        dropZone.ondragleave = () => dropZone.classList.remove('active');
-        dropZone.ondrop = (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('active');
-            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-        };
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = '⚠ ' + msg;
+  el.style.display = 'block';
+}
 
-        fileInput.onchange = (e) => {
-            if (e.target.files.length) handleFile(e.target.files[0]);
-        };
+function clearError() {
+  const el = document.getElementById('error-msg');
+  el.style.display = 'none';
+  el.textContent = '';
+}
 
-        function handleFile(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const Constructor = getConstructor();
-                if (!Constructor) {
-                    alert("Library not loaded yet. Please refresh or check internet.");
-                    return;
-                }
+// ── FILE HANDLING ────────────────────────────────────────────────────
+function handleFile(file) {
+  clearError();
+  document.getElementById('result').style.display = 'none';
 
-                try {
-                    const msgReader = new Constructor(e.target.result);
-                    const fileData = msgReader.getFileData();
-                    if (!fileData) throw new Error("Could not parse data");
-                    showViewer(fileData);
-                } catch (err) {
-                    console.error(err);
-                    alert("Error parsing MSG file. It might be corrupt or an unsupported version.");
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        }
+  if (!file.name.toLowerCase().endsWith('.msg')) {
+    showError('Please select a .msg file.');
+    return;
+  }
 
-        function showViewer(data) {
-            document.getElementById('upload-box').classList.add('hidden');
-            document.getElementById('viewer').classList.remove('hidden');
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = parseMSG(e.target.result);
+      renderResult(parsed);
+    } catch (err) {
+      showError('Could not parse this .msg file. (' + err.message + ')');
+      console.error(err);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
 
-            document.getElementById('msg-subject').textContent = data.subject || "(No Subject)";
-            document.getElementById('msg-from').textContent = `${data.senderName || ''} <${data.senderEmail || ''}>`;
-            
-            const tos = data.recipients ? data.recipients.map(r => r.name || r.email).join(', ') : 'N/A';
-            document.getElementById('msg-to').textContent = tos;
+document.getElementById('fileInput').addEventListener('change', (e) => {
+  if (e.target.files[0]) handleFile(e.target.files[0]);
+});
 
-            const bodyContainer = document.getElementById('email-body-content');
-            if (data.bodyHTML) {
-                bodyContainer.innerHTML = data.bodyHTML;
-            } else {
-                bodyContainer.innerHTML = `<pre class="whitespace-pre-wrap text-sm">${data.body || "No content found."}</pre>`;
-            }
-
-            // Attachments logic
-            if (data.attachments && data.attachments.length > 0) {
-                const section = document.getElementById('attach-section');
-                const list = document.getElementById('attach-list');
-                section.classList.remove('hidden');
-                list.innerHTML = '';
-                data.attachments.forEach(att => {
-                    const chip = document.createElement('div');
-                    chip.className = "flex items-center gap-2 bg-slate-100 border border-slate-200 px-4 py-2 rounded-lg text-xs font-bold text-slate-600";
-                    chip.innerHTML = `<span>📎</span> ${att.fileName || 'Attachment'}`;
-                    list.appendChild(chip);
-                });
-            }
-        }
-    </script>
+const dz = document.getElementById('dropZone');
+dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('drag-over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+dz.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dz.classList.remove('drag-over');
+  if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+</script>
 </body>
 </html>
